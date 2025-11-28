@@ -1,0 +1,66 @@
+{
+  "name": "@alldebrid/sdk",
+  "type": "module",
+  "version": "0.1.0",
+  "description": "Modern TypeScript SDK for AllDebrid API",
+  "author": "Your Name",
+  "license": "MIT",
+  "keywords": [
+    "alldebrid",
+    "debrid",
+    "api",
+    "sdk",
+    "typescript",
+    "download",
+    "premium",
+    "torrent",
+    "magnet"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/alldebrid-ts.git"
+  },
+  "homepage": "https://github.com/yourusername/alldebrid-ts#readme",
+  "bugs": {
+    "url": "https://github.com/yourusername/alldebrid-ts/issues"
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit",
+    "generate": "node scripts/generate-types.js"
+  },
+  "dependencies": {
+    "wretch": "^3.0.3"
+  },
+  "devDependencies": {
+    "@hey-api/openapi-ts": "^0.55.0",
+    "@types/node": "^24.10.1",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "valibot": "^0.42.1",
+    "vitest": "^2.1.8"
+  }
+}
