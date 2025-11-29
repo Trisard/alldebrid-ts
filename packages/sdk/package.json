@@ -1,7 +1,7 @@
 {
-  "name": "@adbjs/alldebrid",
+  "name": "@adbjs/sdk",
   "type": "module",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Modern TypeScript SDK for AllDebrid API",
   "author": "Trisard",
   "license": "MIT",
@@ -18,11 +18,11 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/adbjs/alldebrid-ts.git"
+    "url": "git+https://github.com/Trisard/alldebrid-ts.git"
   },
-  "homepage": "https://github.com/adbjs/alldebrid-ts#readme",
+  "homepage": "https://github.com/Trisard/alldebrid-ts#readme",
   "bugs": {
-    "url": "https://github.com/adbjs/alldebrid-ts/issues"
+    "url": "https://github.com/Trisard/alldebrid-ts/issues"
   },
   "exports": {
     ".": {

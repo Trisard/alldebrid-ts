@@ -6,17 +6,17 @@ Modern, type-safe TypeScript SDK for the AllDebrid API.
 
 This monorepo contains:
 
-- **[@adbjs/alldebrid](./packages/sdk)** - Core TypeScript SDK for AllDebrid API
+- **[@adbjs/sdk](./packages/sdk)** - Core TypeScript SDK for AllDebrid API
 - **@adbjs/cli** - Command-line interface (coming soon)
 
 ## 🚀 Quick Start
 
 ```bash
-npm install @adbjs/alldebrid
+npm install @adbjs/sdk
 ```
 
 ```typescript
-import { AllDebridClient, AuthenticationError, LinkError } from '@adbjs/alldebrid'
+import { AllDebridClient, AuthenticationError, LinkError } from '@adbjs/sdk'
 
 const client = new AllDebridClient({
   apiKey: 'your-api-key',
@@ -41,7 +41,7 @@ try {
 }
 ```
 
-See the [@adbjs/alldebrid README](./packages/sdk/README.md) for full documentation.
+See the [@adbjs/sdk README](./packages/sdk/README.md) for full documentation.
 
 ## ✨ Features
 
@@ -71,7 +71,7 @@ This project uses:
 pnpm install
 
 # Generate types from AllDebrid OpenAPI spec
-pnpm --filter @adbjs/alldebrid generate
+pnpm --filter @adbjs/sdk generate
 
 # Build all packages
 pnpm build
