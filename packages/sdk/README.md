@@ -1,4 +1,4 @@
-# @alldebrid/sdk
+# @adbjs/alldebrid
 
 Modern TypeScript SDK for the AllDebrid API.
 
@@ -14,17 +14,17 @@ Modern TypeScript SDK for the AllDebrid API.
 ## Installation
 
 ```bash
-npm install @alldebrid/sdk
+npm install @adbjs/alldebrid
 # or
-pnpm add @alldebrid/sdk
+pnpm add @adbjs/alldebrid
 # or
-yarn add @alldebrid/sdk
+yarn add @adbjs/alldebrid
 ```
 
 ## Quick Start
 
 ```typescript
-import { AllDebridClient } from '@alldebrid/sdk'
+import { AllDebridClient } from '@adbjs/alldebrid'
 
 // Create a client
 const client = new AllDebridClient({
@@ -166,7 +166,7 @@ import {
   LinkError,
   MagnetError,
   NetworkError,
-} from '@alldebrid/sdk'
+} from '@adbjs/alldebrid'
 
 try {
   await client.link.unlock(url)
@@ -190,7 +190,7 @@ import type {
   GetLinkUnlockResponse,
   GetMagnetStatusResponse,
   GetUserResponse,
-} from '@alldebrid/sdk'
+} from '@adbjs/alldebrid'
 ```
 
 ## Development
@@ -219,5 +219,5 @@ MIT
 ## Links
 
 - [AllDebrid API Documentation](https://docs.alldebrid.com/)
-- [GitHub Repository](https://github.com/your-username/alldebrid-ts)
-- [NPM Package](https://www.npmjs.com/package/@alldebrid/sdk)
+- [GitHub Repository](https://github.com/adbjs/alldebrid-ts)
+- [NPM Package](https://www.npmjs.com/package/@adbjs/alldebrid)
