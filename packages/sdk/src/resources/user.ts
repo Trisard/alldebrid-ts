@@ -1,11 +1,14 @@
 import type {
-  GetUserHistoryDeleteResponse,
-  GetUserHistoryResponse,
+  ClearNotificationResponse,
+  DeleteHistoryResponse,
+  DeleteSavedLinksResponse,
+  GetHistoryResponse,
+  GetSavedLinksResponse,
   GetUserHostsResponse,
-  GetUserLinksDeleteResponse,
-  GetUserLinksResponse,
-  GetUserLinksSaveResponse,
   GetUserResponse,
+  GetVerifStatusResponse,
+  ResendVerifResponse,
+  SaveLinksResponse,
 } from '../generated/types.gen.js'
 import { BaseResource } from '../base-resource.js'
 
@@ -54,7 +57,7 @@ export class UserResource extends BaseResource {
    * ```
    */
   async clearNotification(code: string) {
-    await this.get('/user/notification/clear', { code })
+    await this.post<ClearNotificationResponse>('/user/notification/clear', { code })
   }
 
   // ============================================
@@ -71,35 +74,71 @@ export class UserResource extends BaseResource {
    * ```
    */
   async getLinks() {
-    return this.get<GetUserLinksResponse>('/user/links')
+    return this.get<GetSavedLinksResponse>('/user/links')
   }
 
   /**
-   * Save a link for later use
+   * Save one or multiple links for later use
    *
-   * @param link - The link to save
+   * Supports batch operations - you can save multiple links in a single request.
+   *
+   * @param links - Single link or array of links to save
    *
    * @example
    * ```ts
+   * // Save single link
    * await client.user.saveLink('https://example.com/file.zip')
+   *
+   * // Save multiple links at once
+   * await client.user.saveLink([
+   *   'https://example.com/file1.zip',
+   *   'https://example.com/file2.zip',
+   *   'https://example.com/file3.zip'
+   * ])
    * ```
    */
-  async saveLink(link: string) {
-    return this.get<GetUserLinksSaveResponse>('/user/links/save', { link })
+  async saveLink(links: string | string[]) {
+    const linksArray = Array.isArray(links) ? links : [links]
+    const formData = new FormData()
+
+    // API expects links[] array format
+    for (const link of linksArray) {
+      formData.append('links[]', link)
+    }
+
+    return this.postFormData<SaveLinksResponse>('/user/links/save', formData)
   }
 
   /**
-   * Delete a saved link
+   * Delete one or multiple saved links
    *
-   * @param link - The link to delete (can be the saved link ID or URL)
+   * Supports batch operations - you can delete multiple links in a single request.
+   *
+   * @param links - Single link or array of links to delete (can be saved link IDs or URLs)
    *
    * @example
    * ```ts
+   * // Delete single link
    * await client.user.deleteLink('saved-link-id')
+   *
+   * // Delete multiple links at once
+   * await client.user.deleteLink([
+   *   'saved-link-id-1',
+   *   'saved-link-id-2',
+   *   'saved-link-id-3'
+   * ])
    * ```
    */
-  async deleteLink(link: string) {
-    return this.get<GetUserLinksDeleteResponse>('/user/links/delete', { link })
+  async deleteLink(links: string | string[]) {
+    const linksArray = Array.isArray(links) ? links : [links]
+    const formData = new FormData()
+
+    // API expects links[] array format
+    for (const link of linksArray) {
+      formData.append('links[]', link)
+    }
+
+    return this.postFormData<DeleteSavedLinksResponse>('/user/links/delete', formData)
   }
 
   // ============================================
@@ -116,7 +155,7 @@ export class UserResource extends BaseResource {
    * ```
    */
   async getHistory() {
-    return this.get<GetUserHistoryResponse>('/user/history')
+    return this.get<GetHistoryResponse>('/user/history')
   }
 
   /**
@@ -128,6 +167,39 @@ export class UserResource extends BaseResource {
    * ```
    */
   async clearHistory() {
-    return this.get<GetUserHistoryDeleteResponse>('/user/history/delete')
+    return this.post<DeleteHistoryResponse>('/user/history/delete')
+  }
+
+  // ============================================
+  // Email Verification
+  // ============================================
+
+  /**
+   * Check email verification status
+   *
+   * @param token - Verification token
+   *
+   * @example
+   * ```ts
+   * const status = await client.user.getVerificationStatus('verification-token')
+   * console.log(status.verif) // 'waiting', 'allowed', or 'denied'
+   * ```
+   */
+  async getVerificationStatus(token: string) {
+    return this.post<GetVerifStatusResponse>('/user/verif', undefined, { token })
+  }
+
+  /**
+   * Resend verification email
+   *
+   * @param token - Verification token
+   *
+   * @example
+   * ```ts
+   * await client.user.resendVerification('verification-token')
+   * ```
+   */
+  async resendVerification(token: string) {
+    return this.post<ResendVerifResponse>('/user/verif/resend', undefined, { token })
   }
 }

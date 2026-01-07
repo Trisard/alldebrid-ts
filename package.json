@@ -17,7 +17,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "pnpm -r typecheck",
-    "generate": "pnpm --filter @alldebrid/sdk generate",
+    "generate": "pnpm --filter @adbjs/sdk generate",
     "prepare": "husky",
     "pre-commit": "lint-staged"
   },

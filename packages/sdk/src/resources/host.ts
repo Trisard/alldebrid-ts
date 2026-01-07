@@ -1,6 +1,6 @@
 import type {
-  GetHostsDomainsResponse,
-  GetHostsPriorityResponse,
+  GetHostDomainsResponse,
+  GetHostPriorityResponse,
   GetHostsResponse,
 } from '../generated/types.gen.js'
 import { BaseResource } from '../base-resource.js'
@@ -37,7 +37,7 @@ export class HostResource extends BaseResource {
    * ```
    */
   async domains() {
-    return this.get<GetHostsDomainsResponse>('/hosts/domains')
+    return this.get<GetHostDomainsResponse>('/hosts/domains')
   }
 
   /**
@@ -50,6 +50,6 @@ export class HostResource extends BaseResource {
    * ```
    */
   async priority() {
-    return this.get<GetHostsPriorityResponse>('/hosts/priority')
+    return this.get<GetHostPriorityResponse>('/hosts/priority')
   }
 }

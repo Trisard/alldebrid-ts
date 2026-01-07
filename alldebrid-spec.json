@@ -1,2555 +1,75 @@
 {
-  "openapi": "3.0.0",
+  "openapi": "3.1.0",
   "info": {
-    "title": "Alldebrid API",
-    "description": "Welcome to the OpenAPI Alldebrid API v4 !<br /> You can use this API to access various Alldebrid services from custom applications or scripts.<br /> <br /> API is organized around REST,<br /> returns JSON-encoded responses and use standard HTTP response codes.<br /> <br /> All calls are to be made on the HTTPS endpoints.<br /> Some are public, others require to be authentificated with an apikey (see Authentication).<br /> <br /> You must also identify your apps or script with a meaningfull agent parameter.<br /> <br /> This API version is namespaced as v4, as such all endpoint start with /v4/,<br /> such like http://api.alldebrid.com/v4/ping?agent=apiShowcase.<br /> <br /> This API v4 should be the final version regarding general response format and errors (hopefully).<br />",
-    "version": "4.0.0"
+    "title": "AllDebrid API",
+    "description": "OpenAPI 3.1 specification for the AllDebrid API v4. This specification provides comprehensive documentation of all available endpoints, including detailed request/response schemas, authentication methods, and error codes.",
+    "version": "4.1.0",
+    "contact": {
+      "url": "https://docs.alldebrid.com/v4.1"
+    }
   },
   "servers": [
     {
-      "url": "https://api.alldebrid.com/v4",
-      "description": "Optional server description, e.g. Main (production) server"
+      "url": "https://api.alldebrid.com",
+      "description": "Production server"
     }
   ],
-  "paths": {
-    "/hosts": {
-      "get": {
-        "summary": "Use this endpoint to retrieve informations about what hosts we support.",
-        "description": "Use this endpoint to retrieve informations about what hosts we support and all related informations about it.",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "agent",
-            "schema": {
-              "type": "string",
-              "default": "open-alldebrid"
-            },
-            "required": true,
-            "description": "Your software user-agent."
-          },
-          {
-            "in": "query",
-            "name": "hostOnly",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "Endpoint will only return \"hosts\" data"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Use this endpoint to retrieve informations about what hosts we support and all related informations about it.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "hosts": {
-                          "type": "object",
-                          "additionalProperties": {
-                            "type": "object",
-                            "properties": {
-                              "name": {
-                                "type": "string",
-                                "example": "uptobox"
-                              },
-                              "type": {
-                                "type": "string",
-                                "example": "premium"
-                              },
-                              "domains": {
-                                "type": "array",
-                                "items": {
-                                  "type": "string",
-                                  "example": "uptobox.com"
-                                }
-                              },
-                              "regexp": {
-                                "type": "string",
-                                "example": "(uptobox\\.com/[0-9a-zA-Z]+(/.*)?)|uptostream\\.com/([0-9a-zA-Z]{12})"
-                              },
-                              "regexps": {
-                                "type": "array",
-                                "items": {
-                                  "type": "string",
-                                  "example": "uptostream\\\\.com/iframe/([0-9a-zA-Z]{12})"
-                                }
-                              },
-                              "status": {
-                                "type": "boolean"
-                              }
-                            }
-                          }
-                        },
-                        "streams": {
-                          "type": "object",
-                          "additionalProperties": {
-                            "type": "object",
-                            "properties": {
-                              "name": {
-                                "type": "string",
-                                "example": "youtube"
-                              },
-                              "type": {
-                                "type": "string",
-                                "example": "free"
-                              },
-                              "domains": {
-                                "type": "array",
-                                "items": {
-                                  "type": "string",
-                                  "example": "youtube.be"
-                                }
-                              },
-                              "regexp": {
-                                "type": "string",
-                                "example": "https?:\\/\\/(?:www\\\\.)?youtube\\\\.com\\/show\\/(?P<id>[^?#]*)\", \"https?:\\/\\/(?:www\\\\.)?youtube\\\\.com\\/feed\\/history|:ythistory"
-                              },
-                              "regexps": {
-                                "type": "array",
-                                "items": {
-                                  "type": "string",
-                                  "example": "https?:\\/\\/(?:www\\\\.)?youtube\\\\.com\\/show\\/(?P<id>[^?#]*)"
-                                }
-                              },
-                              "status": {
-                                "type": "boolean"
-                              }
-                            }
-                          }
-                        },
-                        "redirectors": {
-                          "type": "object",
-                          "additionalProperties": {
-                            "type": "object",
-                            "properties": {
-                              "name": {
-                                "type": "string",
-                                "example": "dlprotecte"
-                              },
-                              "type": {
-                                "type": "string",
-                                "example": "premium"
-                              },
-                              "domains": {
-                                "type": "array",
-                                "items": {
-                                  "type": "string",
-                                  "example": "dl-protecte.com"
-                                }
-                              },
-                              "regexp": {
-                                "type": "string",
-                                "example": "(dl-protecte\\.com/[0-9a-zA-Z]+)|(protect-lien\\.com/[0-9a-zA-Z]+)|dl-protecte\\.org/([0-9a-zA-Z]+)"
-                              },
-                              "regexps": {
-                                "type": "array",
-                                "items": {
-                                  "type": "string",
-                                  "example": "uptostream\\\\.com/iframe/([0-9a-zA-Z]{12})"
-                                }
-                              },
-                              "status": {
-                                "type": "boolean"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string",
-                          "example": "AUTH_MISSING_APIKEY"
-                        },
-                        "message": {
-                          "type": "string",
-                          "example": "The auth apikey was not sent"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
+  "tags": [
+    {
+      "name": "System",
+      "description": "System endpoints for connectivity testing and general information"
     },
-    "/hosts/domains": {
-      "get": {
-        "summary": "Use this endpoint to only retrieve the list of supported hosts domains and redirectors as an array.",
-        "description": "Use this endpoint to only retrieve the list of supported hosts domains and redirectors as an array.<br /> <br /> This will also include any alternative domain the hosts or redirectors have.<br /> Please use regexps availables in /hosts or /user/hosts endpoints to validate supported links.<br />",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "agent",
-            "schema": {
-              "type": "string",
-              "default": "open-alldebrid"
-            },
-            "required": true,
-            "description": "Your software user-agent."
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Use this endpoint to retrieve informations about what hosts we support and all related informations about it.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "hosts": {
-                          "type": "array",
-                          "items": {
-                            "type": "string",
-                            "example": "uptobox.com"
-                          }
-                        },
-                        "streams": {
-                          "type": "array",
-                          "items": {
-                            "type": "string",
-                            "example": "youtube.com"
-                          }
-                        },
-                        "redirectors": {
-                          "type": "array",
-                          "items": {
-                            "type": "string",
-                            "example": "dl-protecte.com"
-                          }
-                        }
-                      }
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string",
-                          "example": "AUTH_MISSING_APIKEY"
-                        },
-                        "message": {
-                          "type": "string",
-                          "example": "The auth apikey was not sent"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
+    {
+      "name": "Authentication",
+      "description": "PIN-based authentication flow for generating API keys"
     },
-    "/hosts/priority": {
-      "get": {
-        "summary": "Not all hosts are created equal, so some hosts are more limited than other.",
-        "description": "Use this endpoint to retrieve an ordered list of main domain of hosts, from more open to more restricted.",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "agent",
-            "schema": {
-              "type": "string",
-              "default": "open-alldebrid"
-            },
-            "required": true,
-            "description": "Your software user-agent."
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Use this endpoint to retrieve informations about what hosts we support and all related informations about it.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "hosts": {
-                          "type": "object",
-                          "additionalProperties": {
-                            "type": "integer",
-                            "format": "int64",
-                            "example": 4
-                          }
-                        }
-                      }
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string",
-                          "example": "AUTH_MISSING_APIKEY"
-                        },
-                        "message": {
-                          "type": "string",
-                          "example": "The auth apikey was not sent"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
+    {
+      "name": "Hosts",
+      "description": "Information about supported file hosting services and their availability"
     },
-    "/user": {
-      "get": {
-        "summary": "Use this endpoint to get user informations.",
-        "description": "Use this endpoint to get user informations.",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "apikey",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "Deprecated User apikey (Use Bearer Auth in header)."
-          },
-          {
-            "in": "query",
-            "name": "agent",
-            "schema": {
-              "type": "string",
-              "default": "open-alldebrid"
-            },
-            "required": true,
-            "description": "Your software user-agent."
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Use this endpoint to retrieve informations about what hosts we support and all related informations about it.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "user": {
-                          "type": "object",
-                          "properties": {
-                            "username": {
-                              "type": "string",
-                              "example": "MyUsername"
-                            },
-                            "email": {
-                              "type": "string",
-                              "example": "some.email@example.com"
-                            },
-                            "isPremium": {
-                              "type": "boolean"
-                            },
-                            "isSubscribed": {
-                              "type": "boolean"
-                            },
-                            "isTrial": {
-                              "type": "boolean"
-                            },
-                            "premiumUntil": {
-                              "type": "integer",
-                              "format": "int64",
-                              "example": 1545757200
-                            },
-                            "lang": {
-                              "type": "string",
-                              "example": "fr"
-                            },
-                            "preferedDomain": {
-                              "type": "string",
-                              "example": "fr"
-                            },
-                            "fidelityPoints": {
-                              "type": "integer",
-                              "format": "int64",
-                              "example": 200
-                            },
-                            "limitedHostersQuotas": {
-                              "type": "object",
-                              "additionalProperties": {
-                                "type": "integer",
-                                "format": "int64",
-                                "example": 3000
-                              }
-                            },
-                            "notifications": {
-                              "type": "array",
-                              "items": {
-                                "type": "string",
-                                "example": "FREEDAYS_USED_QUOTA"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string",
-                          "example": "AUTH_MISSING_APIKEY"
-                        },
-                        "message": {
-                          "type": "string",
-                          "example": "The auth apikey was not sent"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
+    {
+      "name": "User",
+      "description": "User account management, information, and settings"
     },
-    "/user/hosts": {
-      "get": {
-        "summary": "This endpoint retrieves a complete list of all available hosts for this user.",
-        "description": "This endpoint retrieves a complete list of all available hosts for this user.<br /> Depending of the account subscription status (free user, trial mode, premium user),<br /> the list and limitations will vary.<br /> <br /> The limits and quota are updated in real time. Use this page to have an<br /> up-to-date list of service the user can use on Alldebrid.<br /> <br /> Quotas will reset every day for premium users.<br />",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "apikey",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "Deprecated User apikey (Use Bearer Auth in header)."
-          },
-          {
-            "in": "query",
-            "name": "agent",
-            "schema": {
-              "type": "string",
-              "default": "open-alldebrid"
-            },
-            "required": true,
-            "description": "Your software user-agent."
-          },
-          {
-            "in": "query",
-            "name": "hostOnly",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "Endpoint will only return \"hosts\" data"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "This endpoint retrieves a complete list of all available hosts for this user",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "hosts": {
-                          "type": "object",
-                          "additionalProperties": {
-                            "type": "object",
-                            "properties": {
-                              "name": {
-                                "type": "string",
-                                "example": "uptobox"
-                              },
-                              "type": {
-                                "type": "string",
-                                "example": "premium"
-                              },
-                              "domains": {
-                                "type": "array",
-                                "items": {
-                                  "type": "string",
-                                  "example": "uptobox.com"
-                                }
-                              },
-                              "regexp": {
-                                "type": "string",
-                                "example": "(uptobox\\.com/[0-9a-zA-Z]+(/.*)?)|uptostream\\.com/([0-9a-zA-Z]{12})"
-                              },
-                              "regexps": {
-                                "type": "array",
-                                "items": {
-                                  "type": "string",
-                                  "example": "uptostream\\\\.com/iframe/([0-9a-zA-Z]{12})"
-                                }
-                              },
-                              "status": {
-                                "type": "boolean"
-                              }
-                            }
-                          }
-                        },
-                        "streams": {
-                          "type": "object",
-                          "additionalProperties": {
-                            "type": "object",
-                            "properties": {
-                              "name": {
-                                "type": "string",
-                                "example": "youtube"
-                              },
-                              "type": {
-                                "type": "string",
-                                "example": "free"
-                              },
-                              "domains": {
-                                "type": "array",
-                                "items": {
-                                  "type": "string",
-                                  "example": "youtube.be"
-                                }
-                              },
-                              "regexp": {
-                                "type": "string",
-                                "example": "https?:\\/\\/(?:www\\\\.)?youtube\\\\.com\\/show\\/(?P<id>[^?#]*)\", \"https?:\\/\\/(?:www\\\\.)?youtube\\\\.com\\/feed\\/history|:ythistory"
-                              },
-                              "regexps": {
-                                "type": "array",
-                                "items": {
-                                  "type": "string",
-                                  "example": "https?:\\/\\/(?:www\\\\.)?youtube\\\\.com\\/show\\/(?P<id>[^?#]*)"
-                                }
-                              },
-                              "status": {
-                                "type": "boolean"
-                              }
-                            }
-                          }
-                        },
-                        "redirectors": {
-                          "type": "object",
-                          "additionalProperties": {
-                            "type": "object",
-                            "properties": {
-                              "name": {
-                                "type": "string",
-                                "example": "dlprotecte"
-                              },
-                              "type": {
-                                "type": "string",
-                                "example": "premium"
-                              },
-                              "domains": {
-                                "type": "array",
-                                "items": {
-                                  "type": "string",
-                                  "example": "dl-protecte.com"
-                                }
-                              },
-                              "regexp": {
-                                "type": "string",
-                                "example": "(dl-protecte\\.com/[0-9a-zA-Z]+)|(protect-lien\\.com/[0-9a-zA-Z]+)|dl-protecte\\.org/([0-9a-zA-Z]+)"
-                              },
-                              "regexps": {
-                                "type": "array",
-                                "items": {
-                                  "type": "string",
-                                  "example": "uptostream\\\\.com/iframe/([0-9a-zA-Z]{12})"
-                                }
-                              },
-                              "status": {
-                                "type": "boolean"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string",
-                          "example": "AUTH_MISSING_APIKEY"
-                        },
-                        "message": {
-                          "type": "string",
-                          "example": "The auth apikey was not sent"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
+    {
+      "name": "Links",
+      "description": "Link unlocking, information retrieval, and download generation"
     },
-    "/user/notification/clear": {
-      "get": {
-        "summary": "This endpoint clears a user notification with its code.",
-        "description": "This endpoint clears a user notification with its code. Current notifications codes can be retreive from the /user endpoint.",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "apikey",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "Deprecated User apikey (Use Bearer Auth in header)."
-          },
-          {
-            "in": "query",
-            "name": "agent",
-            "schema": {
-              "type": "string",
-              "default": "open-alldebrid"
-            },
-            "required": true,
-            "description": "Your software user-agent."
-          },
-          {
-            "in": "query",
-            "name": "code",
-            "schema": {
-              "type": "string"
-            },
-            "required": true,
-            "description": "Notification code to clear"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "This endpoint retrieves a complete list of all available hosts for this user",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "message": {
-                          "type": "string",
-                          "example": "Notification was cleared"
-                        }
-                      }
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string",
-                          "example": "AUTH_MISSING_APIKEY"
-                        },
-                        "message": {
-                          "type": "string",
-                          "example": "The auth apikey was not sent"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
+    {
+      "name": "Magnets",
+      "description": "Torrent and magnet link management"
     },
-    "/link/infos": {
-      "get": {
-        "summary": "Use this endpoint to retrieve informations about a link.",
-        "description": "Use this endpoint to retrieve informations about a link.<br /> If it is in our systems, you'll have the filename and size (if available).<br /> <br /> If the host is not supported or the link is down, an error will be<br /> returned for that link.<br /> <br /> This endpoint only support host links, not redirectors links. Use the<br /> link/redirector endpoint for this.<br />",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "apikey",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "Deprecated User apikey (Use Bearer Auth in header)."
-          },
-          {
-            "in": "query",
-            "name": "agent",
-            "schema": {
-              "type": "string",
-              "default": "open-alldebrid"
-            },
-            "required": true,
-            "description": "Your software user-agent."
-          },
-          {
-            "in": "query",
-            "name": "password",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "Link password (supported on uptobox / 1fichier)."
-          },
-          {
-            "in": "query",
-            "name": "link[]",
-            "description": "The link or array of links you request informations about.",
-            "required": true,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "This endpoint retrieves a complete list of all available hosts for this user",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "infos": {
-                          "description": "Array of info objects",
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "link": {
-                                "type": "string",
-                                "example": "https://uptobox.com/l1ub83vil5c3",
-                                "description": "Requested link"
-                              },
-                              "filename": {
-                                "type": "string",
-                                "example": "ubuntu-18.04.1-server-amd64.iso",
-                                "description": "Link's file filename."
-                              },
-                              "size": {
-                                "type": "integer",
-                                "format": "int64",
-                                "example": 699400192,
-                                "description": "Link's file size in bytes."
-                              },
-                              "host": {
-                                "type": "string",
-                                "example": "uptobox",
-                                "description": "Link host."
-                              },
-                              "hostDomain": {
-                                "type": "string",
-                                "example": "uptobox.com",
-                                "description": "Host main domain"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string",
-                          "example": "LINK_IS_MISSING"
-                        },
-                        "message": {
-                          "type": "string",
-                          "example": "No link was sent"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
+    {
+      "name": "Library",
+      "description": "User link library for saving and managing links"
     },
-    "/link/redirector": {
-      "get": {
-        "summary": "Use this endpoint to retrieve links protected by a redirector or link protector.",
-        "description": "Use this endpoint to retrieve links protected by a redirector or link protector.",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "apikey",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "Deprecated User apikey (Use Bearer Auth in header)."
-          },
-          {
-            "in": "query",
-            "name": "agent",
-            "schema": {
-              "type": "string",
-              "default": "open-alldebrid"
-            },
-            "required": true,
-            "description": "Your software user-agent."
-          },
-          {
-            "in": "query",
-            "name": "link",
-            "schema": {
-              "type": "string"
-            },
-            "required": true,
-            "description": "The redirector or protector link to extract links."
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "This endpoint retrieves a complete list of all available hosts for this user",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "links": {
-                          "type": "array",
-                          "description": "Link(s) extracted.",
-                          "items": {
-                            "type": "string",
-                            "example": "http://uptobox.com/l1ub83vil5c3"
-                          }
-                        }
-                      }
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string",
-                          "example": "REDIRECTOR_NOT_SUPPORTED"
-                        },
-                        "message": {
-                          "type": "string",
-                          "example": "Redirector not supported Redirector not supported"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/link/unlock": {
-      "get": {
-        "summary": "This endpoint unlocks a given link.",
-        "description": "This endpoint can return a delayed ID. In that case, you must follow the delayed link flow.",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "apikey",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "Deprecated User apikey (Use Bearer Auth in header)."
-          },
-          {
-            "in": "query",
-            "name": "agent",
-            "schema": {
-              "type": "string",
-              "default": "open-alldebrid"
-            },
-            "required": true,
-            "description": "Your software user-agent."
-          },
-          {
-            "in": "query",
-            "name": "link",
-            "schema": {
-              "type": "string"
-            },
-            "required": true,
-            "description": "The redirector or protector link to extract links."
-          },
-          {
-            "in": "query",
-            "name": "password",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "Link password (supported on uptobox / 1fichier)."
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "This endpoint retrieves a complete list of all available hosts for this user",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "filename": {
-                          "type": "string",
-                          "example": "[zza].Micmacs.à.tire-larigot.2009.1080p.x265.AC3.mkv"
-                        },
-                        "filesize": {
-                          "type": "integer",
-                          "format": "int64",
-                          "example": 1951233010
-                        },
-                        "host": {
-                          "type": "string",
-                          "example": "uptobox"
-                        },
-                        "hostDomain": {
-                          "type": "string",
-                          "example": "uptobox.com"
-                        },
-                        "id": {
-                          "type": "string",
-                          "example": "2bifjkf54f6"
-                        },
-                        "link": {
-                          "type": "string",
-                          "example": "https://d01vz3.debrid.it/dl/2bifjkf54f6/%5Bzza%5D.Micmacs.%C3%A0.tire-larigot.2009.1080p.x265.AC3.mkv"
-                        },
-                        "paws": {
-                          "type": "boolean"
-                        },
-                        "streams": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "id": {
-                                "type": "string",
-                                "example": "hls"
-                              },
-                              "ext": {
-                                "type": "string",
-                                "example": "m3u8"
-                              },
-                              "quality": {
-                                "type": "string",
-                                "example": 360
-                              },
-                              "filesize": {
-                                "type": "integer",
-                                "format": "int64",
-                                "example": 3433538
-                              },
-                              "proto": {
-                                "type": "string",
-                                "example": "https"
-                              },
-                              "name": {
-                                "type": "string",
-                                "example": "m3u8"
-                              },
-                              "link": {
-                                "type": "string",
-                                "example": "https://www43.uptostream.com/stream/54gwwydcf4/_m_main_0.m3u8"
-                              },
-                              "tb": {
-                                "type": "number",
-                                "example": 130.621
-                              },
-                              "abr": {
-                                "type": "integer",
-                                "format": "int64",
-                                "example": 128
-                              }
-                            }
-                          }
-                        }
-                      }
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string",
-                          "example": "LINK_HOST_NOT_SUPPORTED"
-                        },
-                        "message": {
-                          "type": "string",
-                          "example": "This link is not supported."
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/link/streaming": {
-      "get": {
-        "summary": "The unlocking flow for streaming link is a bit more complex.",
-        "description": "First hit the usual link/unlock endpoint. Two cases:<br /> <br /> Stream link has only one quality : downloading link is available immediatly.<br /> <br /> OR<br /> <br /> Stream links has multiple qualities : you must select the desired<br /> quality to obtain a download link or delayed id by using the<br /> link/streaming endpoint.<br /> <br /> Depending of the stream website, you'll either get a download link, or a<br /> delayed id (see Delayed link section for delayed links).<br />",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "apikey",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "Deprecated User apikey (Use Bearer Auth in header)."
-          },
-          {
-            "in": "query",
-            "name": "agent",
-            "schema": {
-              "type": "string",
-              "default": "open-alldebrid"
-            },
-            "required": true,
-            "description": "Your software user-agent."
-          },
-          {
-            "in": "query",
-            "name": "id",
-            "schema": {
-              "type": "string"
-            },
-            "required": true,
-            "description": "The link ID you received from the /link/unlock call."
-          },
-          {
-            "in": "query",
-            "name": "stream",
-            "schema": {
-              "type": "string"
-            },
-            "required": true,
-            "description": "The stream ID you choosed from the stream qualities list returned by /link/unlock."
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "This endpoint retrieves a complete list of all available hosts for this user",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "filename": {
-                          "type": "string",
-                          "example": "[zza].Micmacs.à.tire-larigot.2009.1080p.x265.AC3.mkv"
-                        },
-                        "filesize": {
-                          "type": "integer",
-                          "format": "int64",
-                          "example": 1951233010
-                        },
-                        "host": {
-                          "type": "string",
-                          "example": "uptobox"
-                        },
-                        "hostDomain": {
-                          "type": "string",
-                          "example": "uptobox.com"
-                        },
-                        "id": {
-                          "type": "string",
-                          "example": "2bifjkf54f6"
-                        },
-                        "link": {
-                          "type": "string",
-                          "example": "https://d01vz3.debrid.it/dl/2bifjkf54f6/%5Bzza%5D.Micmacs.%C3%A0.tire-larigot.2009.1080p.x265.AC3.mkv"
-                        },
-                        "paws": {
-                          "type": "boolean"
-                        },
-                        "streams": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "id": {
-                                "type": "string",
-                                "example": 140
-                              },
-                              "ext": {
-                                "type": "string",
-                                "example": "mp3"
-                              },
-                              "quality": {
-                                "type": "string",
-                                "example": "mp3"
-                              },
-                              "filesize": {
-                                "type": "integer",
-                                "format": "int64",
-                                "example": 3433538
-                              },
-                              "proto": {
-                                "type": "string",
-                                "example": "https"
-                              },
-                              "name": {
-                                "type": "string",
-                                "example": null
-                              },
-                              "link": {
-                                "type": "string"
-                              },
-                              "tb": {
-                                "type": "number",
-                                "example": 130.621
-                              },
-                              "abr": {
-                                "type": "integer",
-                                "format": "int64",
-                                "example": 128
-                              }
-                            }
-                          }
-                        }
-                      }
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string",
-                          "example": "LINK_HOST_NOT_SUPPORTED"
-                        },
-                        "message": {
-                          "type": "string",
-                          "example": "This link is not supported."
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/link/delayed": {
-      "get": {
-        "summary": "This endpoint give the status of a delayed link.",
-        "description": "This endpoint give the status of a delayed link.<br /> <br /> Some links need time to generate, this endpoint send the status of such delayed links.<br /> <br /> You should pool every 5 seconds or more the link/delayed endpoint until given the download link.<br />",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "apikey",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "Deprecated User apikey (Use Bearer Auth in header)."
-          },
-          {
-            "in": "query",
-            "name": "agent",
-            "schema": {
-              "type": "string",
-              "default": "open-alldebrid"
-            },
-            "required": true,
-            "description": "Your software user-agent."
-          },
-          {
-            "in": "query",
-            "name": "id",
-            "schema": {
-              "type": "string"
-            },
-            "required": true,
-            "description": "Delayed ID received in /link/unlock."
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "This endpoint retrieves a complete list of all available hosts for this user",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "status": {
-                          "type": "integer",
-                          "format": "int64",
-                          "example": 2
-                        },
-                        "time_left": {
-                          "type": "integer",
-                          "format": "int64",
-                          "example": 0
-                        },
-                        "link": {
-                          "type": "string",
-                          "example": "http://ombfyx.alld.io/dl/abcdefgh12/ubuntu-16.04.1-server-amd64.iso"
-                        }
-                      }
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string",
-                          "example": "DELAYED_INVALID_ID"
-                        },
-                        "message": {
-                          "type": "string",
-                          "example": "This delayed link id is invalid."
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/magnet/upload": {
-      "get": {
-        "summary": "Upload a magnet with its URI or hash.",
-        "description": "Upload a magnet with its URI or hash.<br /> You can either send the magnets in GET parameters, or in POST.<br />",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "apikey",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "Deprecated User apikey (Use Bearer Auth in header)."
-          },
-          {
-            "in": "query",
-            "name": "agent",
-            "schema": {
-              "type": "string",
-              "default": "open-alldebrid"
-            },
-            "required": true,
-            "description": "Your software user-agent."
-          },
-          {
-            "in": "query",
-            "name": "magnets[]",
-            "description": "Magnet(s) URI or hash. Must send magnet either in GET param or in POST data.",
-            "required": true,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "This endpoint retrieves a complete list of all available hosts for this user",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "magnets": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "magnet": {
-                                "type": "string",
-                                "example": "magnet:?xt=urn:btih:842783e3005495d5d1637f5364b59343c7844707&dn=ubuntu-18.04.2-live-server-amd64.iso"
-                              },
-                              "hash": {
-                                "type": "string",
-                                "example": "842783e3005495d5d1637f5364b59343c7844707"
-                              },
-                              "name": {
-                                "type": "string",
-                                "example": "ubuntu-18.04.2-live-server-amd64.iso"
-                              },
-                              "size": {
-                                "type": "integer",
-                                "format": "int64",
-                                "example": 875773970
-                              },
-                              "ready": {
-                                "type": "boolean"
-                              },
-                              "id": {
-                                "type": "integer",
-                                "format": "int64",
-                                "example": 123456
-                              },
-                              "error": {
-                                "type": "object",
-                                "properties": {
-                                  "code": {
-                                    "type": "string",
-                                    "example": "MAGNET_INVALID_URI"
-                                  },
-                                  "message": {
-                                    "type": "string",
-                                    "example": "Magnet is not valid"
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string",
-                          "example": "AUTH_BAD_APIKEY"
-                        },
-                        "message": {
-                          "type": "string",
-                          "example": "The auth apikey is invalid."
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/magnet/upload/file": {
-      "post": {
-        "summary": "Upload torrent files.",
-        "description": "Upload torrent files.<br /> This endpoint should be POSTed on.<br /> It expects a multipart formdata file upload.<br />",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "apikey",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "Deprecated User apikey (Use Bearer Auth in header)."
-          },
-          {
-            "in": "query",
-            "name": "agent",
-            "schema": {
-              "type": "string",
-              "default": "open-alldebrid"
-            },
-            "required": true,
-            "description": "Your software user-agent."
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "[]file": {
-                    "type": "string",
-                    "format": "binary"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "This endpoint retrieves a complete list of all available hosts for this user",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "files": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "file": {
-                                "type": "string",
-                                "example": "magnet:?xt=urn:btih:842783e3005495d5d1637f5364b59343c7844707&dn=ubuntu-18.04.2-live-server-amd64.iso"
-                              },
-                              "hash": {
-                                "type": "string",
-                                "example": "842783e3005495d5d1637f5364b59343c7844707"
-                              },
-                              "name": {
-                                "type": "string",
-                                "example": "ubuntu-18.04.2-live-server-amd64.iso"
-                              },
-                              "size": {
-                                "type": "integer",
-                                "format": "int64",
-                                "example": 875773970
-                              },
-                              "ready": {
-                                "type": "boolean"
-                              },
-                              "id": {
-                                "type": "integer",
-                                "format": "int64",
-                                "example": 123456
-                              },
-                              "error": {
-                                "type": "object",
-                                "properties": {
-                                  "code": {
-                                    "type": "string",
-                                    "example": "MAGNET_INVALID_FILE"
-                                  },
-                                  "message": {
-                                    "type": "string",
-                                    "example": "File is not a valid torrent."
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string",
-                          "example": "AUTH_BAD_APIKEY"
-                        },
-                        "message": {
-                          "type": "string",
-                          "example": "The auth apikey is invalid."
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/magnet/status": {
-      "get": {
-        "summary": "Get the status of current magnets, or only one if you specify a magnet ID.",
-        "description": "Get the status of current magnets, or only one if you specify a magnet ID.<br /> !TODO: Add live magnet status.<br />",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "apikey",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "Deprecated User apikey (Use Bearer Auth in header)."
-          },
-          {
-            "in": "query",
-            "name": "agent",
-            "schema": {
-              "type": "string",
-              "default": "open-alldebrid"
-            },
-            "required": true,
-            "description": "Your software user-agent."
-          },
-          {
-            "in": "query",
-            "name": "id",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "Magnet ID."
-          },
-          {
-            "in": "query",
-            "name": "status",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "Magnets status filter. Either active, ready, expired or error"
-          },
-          {
-            "in": "query",
-            "name": "session",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "Session ID for Live mode (see Live Mode)."
-          },
-          {
-            "in": "query",
-            "name": "counter",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "Counter for Live mode (see Live Mode)."
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "This endpoint retrieves a complete list of all available hosts for this user",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "magnets": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "id": {
-                                "type": "integer",
-                                "format": "int64",
-                                "example": 56789
-                              },
-                              "filename": {
-                                "type": "string",
-                                "example": "ubuntu-20.04.2-live-server-amd64.iso"
-                              },
-                              "size": {
-                                "type": "integer",
-                                "format": "int64",
-                                "example": 256400192
-                              },
-                              "status": {
-                                "type": "string",
-                                "example": "Ready"
-                              },
-                              "statusCode": {
-                                "type": "integer",
-                                "format": "int64",
-                                "example": 4
-                              },
-                              "downloaded": {
-                                "type": "integer",
-                                "format": "int64",
-                                "example": 256400192
-                              },
-                              "uploaded": {
-                                "type": "integer",
-                                "format": "int64",
-                                "example": 0
-                              },
-                              "seeders": {
-                                "type": "integer",
-                                "format": "int64",
-                                "example": 12
-                              },
-                              "downloadSpeed": {
-                                "type": "integer",
-                                "format": "int64",
-                                "example": 0
-                              },
-                              "uploadSpeed": {
-                                "type": "integer",
-                                "format": "int64",
-                                "example": 0
-                              },
-                              "uploadDate": {
-                                "type": "integer",
-                                "format": "int64",
-                                "example": 1657133868
-                              },
-                              "completionDate": {
-                                "type": "integer",
-                                "format": "int64",
-                                "example": 1657133968
-                              },
-                              "links": {
-                                "type": "array",
-                                "items": {
-                                  "type": "object",
-                                  "properties": {
-                                    "link": {
-                                      "type": "string",
-                                      "example": "http://uptobox.com/aaaabbbbzzzz"
-                                    },
-                                    "filename": {
-                                      "type": "string",
-                                      "example": "ubuntu-20.04.2-live-server-amd64.iso"
-                                    },
-                                    "size": {
-                                      "type": "integer",
-                                      "format": "int64",
-                                      "example": 256458252
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string",
-                          "example": "AUTH_BAD_APIKEY"
-                        },
-                        "message": {
-                          "type": "string",
-                          "example": "The auth apikey is invalid."
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/magnet/delete": {
-      "get": {
-        "summary": "Delete a magnet.",
-        "description": "Delete a magnet.",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "apikey",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "Deprecated User apikey (Use Bearer Auth in header)."
-          },
-          {
-            "in": "query",
-            "name": "agent",
-            "schema": {
-              "type": "string",
-              "default": "open-alldebrid"
-            },
-            "required": true,
-            "description": "Your software user-agent."
-          },
-          {
-            "in": "query",
-            "name": "id",
-            "schema": {
-              "type": "string"
-            },
-            "required": true,
-            "description": "Magnet ID."
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "This endpoint retrieves a complete list of all available hosts for this user",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "message": {
-                          "type": "string",
-                          "example": "Magnet was successfully deleted"
-                        }
-                      }
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string",
-                          "example": "MAGNET_INVALID_ID"
-                        },
-                        "message": {
-                          "type": "string",
-                          "example": "Magnet ID is invalid."
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/magnet/restart": {
-      "get": {
-        "summary": "Restart a failed magnet, or multiple failed magnets at once.",
-        "description": "Restart a failed magnet, or multiple failed magnets at once.",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "apikey",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "Deprecated User apikey (Use Bearer Auth in header)."
-          },
-          {
-            "in": "query",
-            "name": "agent",
-            "schema": {
-              "type": "string",
-              "default": "open-alldebrid"
-            },
-            "required": true,
-            "description": "Your software user-agent."
-          },
-          {
-            "in": "query",
-            "name": "ids",
-            "required": true,
-            "description": "Array of Magnet ID.",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "This endpoint retrieves a complete list of all available hosts for this user",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "magnets": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "magnet": {
-                                "type": "string",
-                                "example": 81951197
-                              },
-                              "message": {
-                                "type": "string",
-                                "example": "Magnet was successfully restarted"
-                              },
-                              "error": {
-                                "type": "object",
-                                "properties": {
-                                  "code": {
-                                    "type": "string",
-                                    "example": "MAGNET_PROCESSING"
-                                  },
-                                  "message": {
-                                    "type": "string",
-                                    "example": "Magnet is processing or complete"
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string",
-                          "example": "MAGNET_INVALID_ID"
-                        },
-                        "message": {
-                          "type": "string",
-                          "example": "Magnet ID is invalid."
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/magnet/instant": {
-      "get": {
-        "summary": "Check if a magnet is available instantly.",
-        "description": "Check if a magnet is available instantly.<br /> You can either send the magnets in GET parameters, or in POST.<br />",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "apikey",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "Deprecated User apikey (Use Bearer Auth in header)."
-          },
-          {
-            "in": "query",
-            "name": "agent",
-            "schema": {
-              "type": "string",
-              "default": "open-alldebrid"
-            },
-            "required": true,
-            "description": "Your software user-agent."
-          },
-          {
-            "in": "query",
-            "name": "magnets[]",
-            "description": "Magnets URI or hash you wish to check instant availability, can be one or many links",
-            "required": true,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "This endpoint retrieves a complete list of all available hosts for this user",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "magnets": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "magnet": {
-                                "type": "string",
-                                "example": "magnet:?xt=urn:btih:842783e3005495d5d1637f5364b59343c7844707&dn=ubuntu-18.04.2-live-server-amd64.iso"
-                              },
-                              "hash": {
-                                "type": "string",
-                                "example": "842783e3005495d5d1637f5364b59343c7844707"
-                              },
-                              "instant": {
-                                "type": "boolean"
-                              },
-                              "error": {
-                                "type": "object",
-                                "properties": {
-                                  "code": {
-                                    "type": "string",
-                                    "example": "MAGNET_INVALID_URI"
-                                  },
-                                  "message": {
-                                    "type": "string",
-                                    "example": "Magnet is not valid"
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string",
-                          "example": "AUTH_BAD_APIKEY"
-                        },
-                        "message": {
-                          "type": "string",
-                          "example": "The auth apikey is invalid."
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/user/links": {
-      "get": {
-        "summary": "Use this endpoint to get links the user saved for later use.",
-        "description": "Use this endpoint to get links the user saved for later use.",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "apikey",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "Deprecated User apikey (Use Bearer Auth in header)."
-          },
-          {
-            "in": "query",
-            "name": "agent",
-            "schema": {
-              "type": "string",
-              "default": "open-alldebrid"
-            },
-            "required": true,
-            "description": "Your software user-agent."
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "This endpoint retrieves a complete list of all available hosts for this user",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "links": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "link": {
-                                "type": "string",
-                                "example": "https://uptobox.com/fx8sx9hcn18s"
-                              },
-                              "filename": {
-                                "type": "string",
-                                "example": "ubuntu-16.04.6-desktop-amd64.iso"
-                              },
-                              "size": {
-                                "type": "integer",
-                                "format": "int64",
-                                "example": 751267520
-                              },
-                              "date": {
-                                "type": "integer",
-                                "format": "int64",
-                                "example": 1569420668
-                              },
-                              "host": {
-                                "type": "string",
-                                "example": "uptobox"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string",
-                          "example": "AUTH_BAD_APIKEY"
-                        },
-                        "message": {
-                          "type": "string",
-                          "example": "The auth apikey is invalid."
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/user/links/save": {
-      "get": {
-        "summary": "Save a link.",
-        "description": "Save a link.",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "apikey",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "Deprecated User apikey (Use Bearer Auth in header)."
-          },
-          {
-            "in": "query",
-            "name": "agent",
-            "schema": {
-              "type": "string",
-              "default": "open-alldebrid"
-            },
-            "required": true,
-            "description": "Your software user-agent."
-          },
-          {
-            "in": "query",
-            "name": "link[]",
-            "description": "Links to save.",
-            "required": true,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "This endpoint retrieves a complete list of all available hosts for this user",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "message": {
-                          "type": "string",
-                          "example": "Link was successfully saved"
-                        }
-                      }
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string",
-                          "example": "AUTH_BAD_APIKEY"
-                        },
-                        "message": {
-                          "type": "string",
-                          "example": "The auth apikey is invalid."
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/user/links/delete": {
-      "get": {
-        "summary": "Delete a saved link.",
-        "description": "Delete a saved link.",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "apikey",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "Deprecated User apikey (Use Bearer Auth in header)."
-          },
-          {
-            "in": "query",
-            "name": "agent",
-            "schema": {
-              "type": "string",
-              "default": "open-alldebrid"
-            },
-            "required": true,
-            "description": "Your software user-agent."
-          },
-          {
-            "in": "query",
-            "name": "link",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "Link to delete."
-          },
-          {
-            "in": "query",
-            "name": "link[]",
-            "description": "Links to delete.",
-            "required": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "This endpoint retrieves a complete list of all available hosts for this user",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "message": {
-                          "type": "string",
-                          "example": "Link was successfully deleted"
-                        }
-                      }
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string",
-                          "example": "AUTH_BAD_APIKEY"
-                        },
-                        "message": {
-                          "type": "string",
-                          "example": "The auth apikey is invalid."
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/user/history": {
-      "get": {
-        "summary": "Use this endpoint to get recent links.",
-        "description": "Use this endpoint to get recent links.<br /> Recent link logging being disabled by default,<br /> this will return nothing until history logging has been activated in your account settings.<br /> <br /> Links older than 3 days are automatically deleted from the recent history.<br /> To keep links in your account, use the Saved links.<br />",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "apikey",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "Deprecated User apikey (Use Bearer Auth in header)."
-          },
-          {
-            "in": "query",
-            "name": "agent",
-            "schema": {
-              "type": "string",
-              "default": "open-alldebrid"
-            },
-            "required": true,
-            "description": "Your software user-agent."
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "This endpoint retrieves a complete list of all available hosts for this user",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "links": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "link": {
-                                "type": "string",
-                                "example": "https://uptobox.com/fx8sx9hcn18s"
-                              },
-                              "filename": {
-                                "type": "string",
-                                "example": "ubuntu-16.04.6-desktop-amd64.iso"
-                              },
-                              "size": {
-                                "type": "integer",
-                                "format": "int64",
-                                "example": 751267520
-                              },
-                              "date": {
-                                "type": "integer",
-                                "format": "int64",
-                                "example": 1569420668
-                              },
-                              "host": {
-                                "type": "string",
-                                "example": "uptobox"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string",
-                          "example": "AUTH_BAD_APIKEY"
-                        },
-                        "message": {
-                          "type": "string",
-                          "example": "The auth apikey is invalid."
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/user/history/delete": {
-      "get": {
-        "summary": "Use this endpoint to delete all links currently in your recent links history.",
-        "description": "Use this endpoint to delete all links currently in your recent links history.<br /> Links older than 3 days are automatically deleted from the recent history.<br />",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "apikey",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "Deprecated User apikey (Use Bearer Auth in header)."
-          },
-          {
-            "in": "query",
-            "name": "agent",
-            "schema": {
-              "type": "string",
-              "default": "open-alldebrid"
-            },
-            "required": true,
-            "description": "Your software user-agent."
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "This endpoint retrieves a complete list of all available hosts for this user",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "message": {
-                          "type": "string",
-                          "example": "Links were successfully deleted"
-                        }
-                      }
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string",
-                          "example": "AUTH_BAD_APIKEY"
-                        },
-                        "message": {
-                          "type": "string",
-                          "example": "The auth apikey is invalid."
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
+    {
+      "name": "Vouchers",
+      "description": "Reseller voucher management (reseller accounts only)"
     }
-  },
+  ],
   "components": {
     "securitySchemes": {
       "bearerAuth": {
         "type": "http",
         "scheme": "bearer",
-        "bearerFormat": "JWT"
+        "description": "Apikey AllDebrid (Bearer token)"
       }
     },
     "schemas": {
-      "ErrorCodes": {
-        "description": "You can find all possible errors here, available in PHP array and JSON format if needed.<br /> Some errors will return an HTTP code 401 or 429, depending of the error.<br />",
+      "AllDebridErrorCode": {
         "type": "string",
         "enum": [
           "GENERIC",
-          404,
-          "AUTH_MISSING_AGENT",
-          "AUTH_BAD_AGENT",
+          "MAINTENANCE",
           "AUTH_MISSING_APIKEY",
           "AUTH_BAD_APIKEY",
           "AUTH_BLOCKED",
           "AUTH_USER_BANNED",
+          "ALREADY_SENT",
+          "NO_SERVER",
           "LINK_IS_MISSING",
+          "BAD_LINK",
           "LINK_HOST_NOT_SUPPORTED",
           "LINK_DOWN",
           "LINK_PASS_PROTECTED",
@@ -2558,6 +78,8 @@
           "LINK_HOST_FULL",
           "LINK_HOST_LIMIT_REACHED",
           "LINK_ERROR",
+          "LINK_TEMPORARY_UNAVAILABLE",
+          "LINK_NOT_SUPPORTED",
           "REDIRECTOR_NOT_SUPPORTED",
           "REDIRECTOR_ERROR",
           "STREAM_INVALID_GEN_ID",
@@ -2572,17 +94,2391 @@
           "MAGNET_NO_URI",
           "MAGNET_PROCESSING",
           "MAGNET_TOO_MANY_ACTIVE",
+          "MAGNET_TOO_MANY",
           "MAGNET_MUST_BE_PREMIUM",
-          "MAGNET_NO_SERVER",
           "MAGNET_TOO_LARGE",
+          "MAGNET_UPLOAD_FAILED",
+          "MAGNET_INTERNAL_ERROR",
+          "MAGNET_CANT_BOOTSTRAP",
+          "MAGNET_MAGNET_TOO_BIG",
+          "MAGNET_TOOK_TOO_LONG",
+          "MAGNET_LINKS_REMOVED",
+          "MAGNET_PROCESSING_FAILED",
           "PIN_ALREADY_AUTHED",
           "PIN_EXPIRED",
           "PIN_INVALID",
           "USER_LINK_MISSING",
           "USER_LINK_INVALID",
-          "NO_SERVER",
-          "MISSING_NOTIF_ENDPOINT"
-        ]
+          "MISSING_NOTIF_ENDPOINT",
+          "VOUCHER_DURATION_INVALID",
+          "VOUCHER_NB_INVALID",
+          "NO_MORE_VOUCHER",
+          "INSUFFICIENT_BALANCE",
+          "DOWNLOAD_FAILED",
+          "ACCOUNT_INVALID",
+          "NO_JSON_PARAM",
+          "JSON_INVALID",
+          "FREEDAYS_INVALID_COUNTRY",
+          "FREEDAYS_INVALID_PHONE",
+          "FREEDAYS_INVALID_PROVIDER",
+          "FREEDAYS_USED_PHONE",
+          "FREEDAYS_ALREADY_REQUESTED",
+          "FREEDAYS_INVALID_STATUS",
+          "FREEDAYS_TOO_MUCH_RETRIES",
+          "FREEDAYS_INVALID_CODE",
+          "FREEDAYS_DENIED",
+          "FREEDAYS_ERROR_SENDING"
+        ],
+        "description": "Liste exhaustive des codes d'erreur AllDebrid (janvier 2026)"
+      },
+      "ErrorDetail": {
+        "type": "object",
+        "required": ["code", "message"],
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/AllDebridErrorCode"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "ApiErrorResponse": {
+        "type": "object",
+        "required": ["status", "error"],
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["error"]
+          },
+          "error": {
+            "$ref": "#/components/schemas/ErrorDetail"
+          }
+        }
+      },
+      "ApiSuccessResponseBase": {
+        "type": "object",
+        "required": ["status"],
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["success"]
+          },
+          "demo": {
+            "type": "boolean"
+          },
+          "deprecated": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PingResponseData": {
+        "type": "object",
+        "properties": {
+          "ping": {
+            "type": "string"
+          }
+        }
+      },
+      "PinGetResponseData": {
+        "type": "object",
+        "required": ["pin", "check", "expires_in"],
+        "properties": {
+          "pin": {
+            "type": "string"
+          },
+          "check": {
+            "type": "string"
+          },
+          "expires_in": {
+            "type": "integer"
+          },
+          "user_url": {
+            "type": "string"
+          },
+          "base_url": {
+            "type": "string"
+          }
+        }
+      },
+      "PinCheckResponseData": {
+        "type": "object",
+        "required": ["activated", "expires_in"],
+        "properties": {
+          "activated": {
+            "type": "boolean"
+          },
+          "expires_in": {
+            "type": "integer"
+          },
+          "apikey": {
+            "type": "string"
+          }
+        }
+      },
+      "HostDetail": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["premium", "free"]
+          },
+          "domains": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "regexp": {
+            "type": "string"
+          },
+          "regexps": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "status": {
+            "type": "boolean"
+          },
+          "quota": {
+            "type": "integer"
+          },
+          "quotaMax": {
+            "type": "integer"
+          },
+          "quotaType": {
+            "type": "string",
+            "enum": ["traffic", "nb_download"]
+          },
+          "limitSimuDl": {
+            "type": "integer"
+          }
+        }
+      },
+      "HostsResponseData": {
+        "type": "object",
+        "properties": {
+          "hosts": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/HostDetail"
+            }
+          },
+          "streams": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/HostDetail"
+            }
+          },
+          "redirectors": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/HostDetail"
+            }
+          }
+        }
+      },
+      "HostsDomainsResponseData": {
+        "type": "object",
+        "properties": {
+          "hosts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "streams": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "redirectors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "HostsPriorityResponseData": {
+        "type": "object",
+        "properties": {
+          "hosts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "UserInfo": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "isPremium": {
+            "type": "boolean"
+          },
+          "isSubscribed": {
+            "type": "boolean"
+          },
+          "isTrial": {
+            "type": "boolean"
+          },
+          "premiumUntil": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "lang": {
+            "type": "string"
+          },
+          "preferedDomain": {
+            "type": "string"
+          },
+          "fidelityPoints": {
+            "type": "integer"
+          },
+          "limitedHostersQuotas": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "integer"
+            }
+          },
+          "remainingTrialQuota": {
+            "type": "integer"
+          },
+          "notifications": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "UserResponseData": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/UserInfo"
+          }
+        }
+      },
+      "UserHostsResponseData": {
+        "type": "object",
+        "properties": {
+          "hosts": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/HostDetail"
+            }
+          }
+        }
+      },
+      "VerifStatusResponseData": {
+        "type": "object",
+        "properties": {
+          "verif": {
+            "type": "string",
+            "enum": ["waiting", "allowed", "denied"]
+          },
+          "resendable": {
+            "type": "boolean"
+          },
+          "apikey": {
+            "type": "string"
+          }
+        }
+      },
+      "ResendVerifResponseData": {
+        "type": "object",
+        "properties": {
+          "sent": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ClearNotificationResponseData": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "LinkInfoItem": {
+        "type": "object",
+        "properties": {
+          "link": {
+            "type": "string"
+          },
+          "filename": {
+            "type": "string"
+          },
+          "size": {
+            "type": "integer"
+          },
+          "host": {
+            "type": "string"
+          },
+          "hostDomain": {
+            "type": "string"
+          },
+          "error": {
+            "$ref": "#/components/schemas/ErrorDetail"
+          }
+        }
+      },
+      "LinkInfosResponseData": {
+        "type": "object",
+        "properties": {
+          "infos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkInfoItem"
+            }
+          }
+        }
+      },
+      "RedirectorResponseData": {
+        "type": "object",
+        "properties": {
+          "links": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "UnlockLinkResponseData": {
+        "type": "object",
+        "properties": {
+          "link": {
+            "type": "string"
+          },
+          "filename": {
+            "type": "string"
+          },
+          "filesize": {
+            "type": "integer"
+          },
+          "host": {
+            "type": "string"
+          },
+          "hostDomain": {
+            "type": "string"
+          },
+          "paws": {
+            "type": "boolean"
+          },
+          "streams": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "id": {
+            "type": "string"
+          },
+          "delayed": {
+            "type": "integer"
+          }
+        }
+      },
+      "StreamingResponseData": {
+        "type": "object",
+        "properties": {
+          "link": {
+            "type": "string"
+          },
+          "filename": {
+            "type": "string"
+          },
+          "filesize": {
+            "type": "integer"
+          },
+          "delayed": {
+            "type": "integer"
+          }
+        }
+      },
+      "DelayedStatusResponseData": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "description": "1 = processing, 2 = ready, 3 = error"
+          },
+          "time_left": {
+            "type": "integer"
+          },
+          "link": {
+            "type": "string"
+          }
+        }
+      },
+      "MagnetUploadItem": {
+        "type": "object",
+        "properties": {
+          "magnet": {
+            "type": "string"
+          },
+          "hash": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "size": {
+            "type": "integer"
+          },
+          "ready": {
+            "type": "boolean"
+          },
+          "id": {
+            "type": "integer"
+          },
+          "error": {
+            "$ref": "#/components/schemas/ErrorDetail"
+          }
+        }
+      },
+      "MagnetUploadResponseData": {
+        "type": "object",
+        "properties": {
+          "magnets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MagnetUploadItem"
+            }
+          }
+        }
+      },
+      "TorrentFileUploadItem": {
+        "type": "object",
+        "properties": {
+          "file": {
+            "type": "string",
+            "description": "Nom du fichier uploadé"
+          },
+          "name": {
+            "type": "string",
+            "description": "Nom du torrent détecté"
+          },
+          "size": {
+            "type": "integer"
+          },
+          "hash": {
+            "type": "string"
+          },
+          "ready": {
+            "type": "boolean"
+          },
+          "id": {
+            "type": "integer"
+          },
+          "error": {
+            "$ref": "#/components/schemas/ErrorDetail"
+          }
+        }
+      },
+      "TorrentFileUploadResponseData": {
+        "type": "object",
+        "properties": {
+          "files": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TorrentFileUploadItem"
+            }
+          }
+        }
+      },
+      "MagnetFile": {
+        "type": "object",
+        "properties": {
+          "n": {
+            "type": "string"
+          },
+          "s": {
+            "type": "integer"
+          },
+          "l": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "e": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MagnetFile"
+            }
+          }
+        }
+      },
+      "MagnetStatusItem": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "filename": {
+            "type": "string"
+          },
+          "size": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          },
+          "downloaded": {
+            "type": "integer"
+          },
+          "uploaded": {
+            "type": "integer"
+          },
+          "downloadSpeed": {
+            "type": "integer"
+          },
+          "uploadSpeed": {
+            "type": "integer"
+          },
+          "seeders": {
+            "type": "integer"
+          },
+          "files": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MagnetFile"
+            }
+          }
+        }
+      },
+      "MagnetStatusResponseData": {
+        "type": "object",
+        "properties": {
+          "magnets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MagnetStatusItem"
+            }
+          },
+          "counter": {
+            "type": "integer"
+          },
+          "fullsync": {
+            "type": "boolean"
+          }
+        }
+      },
+      "MagnetFilesItem": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "files": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MagnetFile"
+            }
+          },
+          "error": {
+            "$ref": "#/components/schemas/ErrorDetail"
+          }
+        }
+      },
+      "MagnetFilesResponseData": {
+        "type": "object",
+        "properties": {
+          "magnets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MagnetFilesItem"
+            }
+          }
+        }
+      },
+      "MessageResponseData": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "SavedLink": {
+        "type": "object",
+        "properties": {
+          "link": {
+            "type": "string"
+          },
+          "filename": {
+            "type": "string"
+          },
+          "size": {
+            "type": "integer"
+          },
+          "date": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "host": {
+            "type": "string"
+          }
+        }
+      },
+      "SavedLinksResponseData": {
+        "type": "object",
+        "properties": {
+          "links": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SavedLink"
+            }
+          }
+        }
+      },
+      "VoucherBalanceResponseData": {
+        "type": "object",
+        "properties": {
+          "balance": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      },
+      "VoucherGenerateResponseData": {
+        "type": "object",
+        "properties": {
+          "codes": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Liste des codes vouchers générés"
+          },
+          "pricePerVoucher": {
+            "type": "number",
+            "format": "float",
+            "description": "Prix unitaire du voucher"
+          },
+          "total": {
+            "type": "number",
+            "format": "float",
+            "description": "Montant total débité"
+          },
+          "balance": {
+            "type": "number",
+            "format": "float",
+            "description": "Nouveau solde après génération"
+          }
+        }
+      },
+      "VoucherGetResponseData": {
+        "type": "object",
+        "properties": {
+          "codes": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Liste des codes vouchers disponibles"
+          },
+          "partialList": {
+            "type": "boolean",
+            "description": "True si la liste est partielle (pas assez de vouchers pré-générés disponibles)"
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/ping": {
+      "get": {
+        "tags": ["System"],
+        "summary": "Test de connexion API",
+        "description": "Public endpoint for testing API connectivity and availability. Does not require authentication. Returns a simple 'pong' response to confirm the API is reachable.",
+        "operationId": "ping",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Réponse pong",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiSuccessResponseBase"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/PingResponseData"
+                    }
+                  }
+                },
+                "examples": {
+                  "success": {
+                    "value": {
+                      "status": "success",
+                      "data": {
+                        "ping": "pong"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pin/get": {
+      "get": {
+        "tags": ["Authentication"],
+        "summary": "Générer un PIN pour authentification",
+        "description": "Generates a 4-character PIN code for user authentication. The user must visit the provided URL and enter the PIN to authorize the application. The PIN expires after 10 minutes. Use the 'check' value with /pin/check to poll for user confirmation and retrieve the API key.",
+        "operationId": "getPin",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "PIN généré",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiSuccessResponseBase"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/PinGetResponseData"
+                    }
+                  }
+                },
+                "examples": {
+                  "success": {
+                    "value": {
+                      "status": "success",
+                      "data": {
+                        "pin": "ABCD",
+                        "check": "664c3ca2635c99f291d28e11ea18e154750bd21a",
+                        "expires_in": 600,
+                        "user_url": "https://alldebrid.com/pin/?pin=ABCD",
+                        "base_url": "https://alldebrid.com/pin/"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pin/check": {
+      "get": {
+        "tags": ["Authentication"],
+        "summary": "Vérifier le statut du PIN",
+        "description": "Polls the PIN status to check if the user has authorized the application. Returns 'activated: false' while waiting for user confirmation. Once the user enters the PIN on the AllDebrid website, returns 'activated: true' with the API key that should be used for all subsequent authenticated requests.",
+        "operationId": "checkPin",
+        "security": [],
+        "parameters": [
+          {
+            "name": "check",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pin",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Statut du PIN",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiSuccessResponseBase"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/PinCheckResponseData"
+                    }
+                  }
+                },
+                "examples": {
+                  "waiting": {
+                    "summary": "PIN en attente",
+                    "value": {
+                      "status": "success",
+                      "data": {
+                        "activated": false,
+                        "expires_in": 580
+                      }
+                    }
+                  },
+                  "activated": {
+                    "summary": "PIN activé → apikey récupérée",
+                    "value": {
+                      "status": "success",
+                      "data": {
+                        "apikey": "abcdefABCDEF1234567890abcdefABCDEF1234",
+                        "activated": true,
+                        "expires_in": 570
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/hosts": {
+      "get": {
+        "tags": ["Hosts"],
+        "summary": "Liste des hôtes supportés (public)",
+        "description": "Retrieves the complete list of supported file hosting services (hosts), streaming platforms, and redirector services. Returns detailed information including domains, regex patterns, status, quotas, and limits for each service. This is a public endpoint that does not require authentication.",
+        "operationId": "getHosts",
+        "security": [],
+        "parameters": [
+          {
+            "name": "hostsOnly",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Détails des hôtes, streams et redirectors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiSuccessResponseBase"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/HostsResponseData"
+                    }
+                  }
+                },
+                "examples": {
+                  "success": {
+                    "value": {
+                      "status": "success",
+                      "data": {
+                        "hosts": {
+                          "mega": {
+                            "name": "mega",
+                            "type": "premium",
+                            "domains": ["mega.nz", "mega.co.nz"],
+                            "regexp": "(mega(\\.co)?\\.nz/#!([0-9a-zA-Z_]{20,36}))",
+                            "status": true
+                          }
+                        },
+                        "streams": {},
+                        "redirectors": {}
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/hosts/domains": {
+      "get": {
+        "tags": ["Hosts"],
+        "summary": "Domaines supportés",
+        "description": "Returns a simplified list of supported domains for hosts, streaming services, and redirectors. This endpoint provides just the domain names without additional metadata, useful for quick domain validation. Public endpoint that does not require authentication.",
+        "operationId": "getHostDomains",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Listes de domaines",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiSuccessResponseBase"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/HostsDomainsResponseData"
+                    }
+                  }
+                },
+                "examples": {
+                  "success": {
+                    "value": {
+                      "status": "success",
+                      "data": {
+                        "hosts": ["mega.nz", "mega.co.nz"],
+                        "streams": ["youtube.com", "youtu.be"],
+                        "redirectors": ["dl-protecte.com"]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/hosts/priority": {
+      "get": {
+        "tags": ["Hosts"],
+        "summary": "Priorité des hôtes",
+        "description": "Returns hosts ordered by their priority/capacity. Lower numbers indicate higher priority. This information helps determine which hosts have better availability or fewer restrictions. Public endpoint that does not require authentication.",
+        "operationId": "getHostPriority",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Ordre de priorité",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiSuccessResponseBase"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/HostsPriorityResponseData"
+                    }
+                  }
+                },
+                "examples": {
+                  "success": {
+                    "value": {
+                      "status": "success",
+                      "data": {
+                        "hosts": {
+                          "1fichier": 1,
+                          "4shared": 2
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Informations sur l'utilisateur",
+        "description": "Retrieves detailed information about the authenticated user's account including username, email, premium status, subscription details, remaining quotas, fidelity points, and active notifications. Essential for checking account status and available features.",
+        "operationId": "getUser",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Détails du compte",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiSuccessResponseBase"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/UserResponseData"
+                    }
+                  }
+                },
+                "examples": {
+                  "success": {
+                    "value": {
+                      "status": "success",
+                      "data": {
+                        "user": {
+                          "username": "MyUsername",
+                          "email": "some.email@example.com",
+                          "isPremium": true,
+                          "isSubscribed": false,
+                          "isTrial": false,
+                          "premiumUntil": 1545757200,
+                          "lang": "fr",
+                          "preferedDomain": "fr",
+                          "fidelityPoints": 200,
+                          "limitedHostersQuotas": {
+                            "someHost": 1024
+                          },
+                          "notifications": ["FREEDAYS_USED_QUOTA"]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/hosts": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Hôtes disponibles pour l'utilisateur",
+        "description": "Returns the list of file hosting services available to the authenticated user based on their subscription tier (free or premium). Includes user-specific quota information, download limits, and current usage for each host. Use this to determine which hosts the user can access.",
+        "operationId": "getUserHosts",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Hôtes avec quotas",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiSuccessResponseBase"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/UserHostsResponseData"
+                    }
+                  }
+                },
+                "examples": {
+                  "success": {
+                    "value": {
+                      "status": "success",
+                      "data": {
+                        "hosts": {
+                          "mega": {
+                            "name": "mega",
+                            "type": "premium",
+                            "domains": ["mega.nz", "mega.co.nz"],
+                            "regexps": ["mega(\\.co)?\\.nz/([0-9a-zA-Z_]{20,36})"],
+                            "status": true,
+                            "quota": 1234,
+                            "quotaMax": 5000,
+                            "quotaType": "traffic",
+                            "limitSimuDl": 2
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/verif": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Statut de vérification email",
+        "description": "Checks the email verification status for security verification when logging in from a new location. Returns 'waiting' while pending user confirmation, 'allowed' once verified with a new API key, or 'denied' if rejected. The token parameter is obtained during the login flow.",
+        "operationId": "getVerifStatus",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiSuccessResponseBase"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/VerifStatusResponseData"
+                    }
+                  }
+                },
+                "examples": {
+                  "waiting": {
+                    "value": {
+                      "status": "success",
+                      "data": {
+                        "verif": "waiting",
+                        "resendable": true
+                      }
+                    }
+                  },
+                  "allowed": {
+                    "value": {
+                      "status": "success",
+                      "data": {
+                        "verif": "allowed",
+                        "apikey": "someValidApikey"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Successful response"
+          }
+        }
+      }
+    },
+    "/user/verif/resend": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Renvoyer l'email de vérification",
+        "description": "Resends the verification email to the user's registered email address. Use this when the user hasn't received the initial verification email or if it has expired. Can only be called if the verification status indicates it's resendable.",
+        "operationId": "resendVerif",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiSuccessResponseBase"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ResendVerifResponseData"
+                    }
+                  }
+                },
+                "examples": {
+                  "success": {
+                    "value": {
+                      "status": "success",
+                      "data": {
+                        "sent": true
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Successful response"
+          }
+        }
+      }
+    },
+    "/user/notification/clear": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Effacer une notification",
+        "description": "Clears a specific user notification by its code. Notifications appear in the user info response and inform about account events, quota warnings, or system messages. Use this to mark notifications as read/acknowledged.",
+        "operationId": "clearNotification",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiSuccessResponseBase"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ClearNotificationResponseData"
+                    }
+                  }
+                },
+                "examples": {
+                  "success": {
+                    "value": {
+                      "status": "success",
+                      "data": {
+                        "message": "Notification was cleared"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Successful response"
+          }
+        }
+      }
+    },
+    "/link/infos": {
+      "post": {
+        "tags": ["Links"],
+        "summary": "Infos sur des liens",
+        "description": "Retrieves metadata information for one or more file hosting links without unlocking them. Returns filename, file size, host information, and any errors. Useful for validating links and displaying file information before downloading. Supports password-protected links.",
+        "operationId": "getLinkInfos",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "link[]",
+            "in": "query",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiSuccessResponseBase"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/LinkInfosResponseData"
+                    }
+                  }
+                },
+                "examples": {
+                  "success": {
+                    "value": {
+                      "status": "success",
+                      "data": {
+                        "infos": [
+                          {
+                            "link": "http://example.com/somefile",
+                            "filename": "somefile.txt",
+                            "size": 699400192,
+                            "host": "example",
+                            "hostDomain": "example.com"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Successful response"
+          }
+        }
+      }
+    },
+    "/link/redirector": {
+      "post": {
+        "tags": ["Links"],
+        "summary": "Extraire liens d'un redirector",
+        "description": "Extracts the actual file hosting links from a redirector/link protector service. Redirectors hide the real download links behind an intermediate URL. This endpoint resolves the redirector and returns the real links that can then be unlocked with /link/unlock.",
+        "operationId": "getRedirectorLinks",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "link",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiSuccessResponseBase"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/RedirectorResponseData"
+                    }
+                  }
+                },
+                "examples": {
+                  "success": {
+                    "value": {
+                      "status": "success",
+                      "data": {
+                        "links": [
+                          "https://redirect.alldebrid.com/mnsaj-0-fcdeaf3287a502c6e97359372afee2465043d9d8f7662f8ad18cbde0a882a42d"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Successful response"
+          }
+        }
+      }
+    },
+    "/link/unlock": {
+      "post": {
+        "tags": ["Links"],
+        "summary": "Débrider un lien",
+        "description": "Unlocks a file hosting link and generates a direct, high-speed download URL. This is the core debrid functionality. Returns immediately with a download link for most hosts. For some hosts, returns a 'delayed' ID that requires polling with /link/delayed. Supports password-protected links and may include streaming options for media files.",
+        "operationId": "unlockLink",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "link",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiSuccessResponseBase"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/UnlockLinkResponseData"
+                    }
+                  }
+                },
+                "examples": {
+                  "direct": {
+                    "value": {
+                      "status": "success",
+                      "data": {
+                        "link": "http://ombfyx.debrid.it/dl/abcdefgh12/somefile.txt",
+                        "filename": "somefile.txt",
+                        "filesize": 699400192,
+                        "host": "example",
+                        "paws": false,
+                        "id": "abcdefgh12"
+                      }
+                    }
+                  },
+                  "delayed": {
+                    "value": {
+                      "status": "success",
+                      "data": {
+                        "filename": "bigfile.rar",
+                        "filesize": 10737418240,
+                        "host": "1fichier",
+                        "delayed": 12345
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Successful response"
+          }
+        }
+      }
+    },
+    "/link/streaming": {
+      "post": {
+        "tags": ["Links"],
+        "summary": "Obtenir un lien streaming spécifique",
+        "description": "Retrieves a specific streaming quality variant for a media file. When unlocking a video link, multiple streaming options may be available (different resolutions/formats). Use the 'id' from the unlock response and the 'stream' identifier to get the direct link for the desired quality.",
+        "operationId": "getStreamingLink",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "stream",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiSuccessResponseBase"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/StreamingResponseData"
+                    }
+                  }
+                },
+                "examples": {
+                  "success": {
+                    "value": {
+                      "status": "success",
+                      "data": {
+                        "link": "https://p1cjev.alldeb.ovh/dl/1nsjw3315ad/Rick%20Astley%20-%20Never%20Gonna%20Give%20You%20Up%20(Video).360.mp4",
+                        "filename": "Rick Astley - Never Gonna Give You Up (Video).360.mp4",
+                        "filesize": 113129149
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Successful response"
+          }
+        }
+      }
+    },
+    "/link/delayed": {
+      "post": {
+        "tags": ["Links"],
+        "summary": "Vérifier statut d'un lien delayed",
+        "description": "Polls the status of a delayed download link. Some file hosts require processing time before the download link is ready. When /link/unlock returns a 'delayed' ID, use this endpoint to check the generation status. Returns status 1 (processing), 2 (ready with link), or 3 (error).",
+        "operationId": "getDelayedStatus",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiSuccessResponseBase"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/DelayedStatusResponseData"
+                    }
+                  }
+                },
+                "examples": {
+                  "processing": {
+                    "value": {
+                      "status": "success",
+                      "data": {
+                        "status": 1,
+                        "time_left": 45
+                      }
+                    }
+                  },
+                  "ready": {
+                    "value": {
+                      "status": "success",
+                      "data": {
+                        "status": 2,
+                        "time_left": 0,
+                        "link": "http://ombfyx.debrid.it/dl/abcdefgh12/ubuntu-16.04.1-server-amd64.iso"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Successful response"
+          }
+        }
+      }
+    },
+    "/magnet/upload": {
+      "post": {
+        "tags": ["Magnets"],
+        "summary": "Uploader des magnets",
+        "description": "Uploads one or more magnet links or torrent URIs for processing. AllDebrid will download the torrent and make the files available for direct download. Returns immediately with magnet IDs and ready status. If ready=true, files are immediately available. Otherwise, poll /magnet/status for progress. Premium users only.",
+        "operationId": "uploadMagnets",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "magnets[]",
+            "in": "query",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiSuccessResponseBase"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/MagnetUploadResponseData"
+                    }
+                  }
+                },
+                "examples": {
+                  "success": {
+                    "value": {
+                      "status": "success",
+                      "data": {
+                        "magnets": [
+                          {
+                            "id": 123456,
+                            "hash": "842783e3005495d5d1637f5364b59343c7844707",
+                            "name": "ubuntu-18.04.2-live-server-amd64.iso",
+                            "size": 875773970,
+                            "ready": true
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Successful response"
+          }
+        }
+      }
+    },
+    "/magnet/upload/file": {
+      "post": {
+        "tags": ["Magnets"],
+        "summary": "Uploader des fichiers .torrent",
+        "description": "Uploads one or more .torrent files (binary torrent files) for processing. Alternative to magnet links when you have the actual torrent file. Accepts multipart/form-data with torrent files. Returns torrent information and magnet IDs for tracking. Premium users only.",
+        "operationId": "uploadTorrentFile",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "files": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiSuccessResponseBase"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/TorrentFileUploadResponseData"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Successful response"
+          }
+        }
+      }
+    },
+    "/magnet/status": {
+      "post": {
+        "tags": ["Magnets"],
+        "summary": "Statut des magnets",
+        "description": "Retrieves the status of magnets with two operation modes:\n\n**Standard Mode**: Get status of all magnets, a specific magnet by ID, or filter by status (active, ready, expired, error). Returns complete magnet information including download progress, speed, and file details.\n\n**Live Mode**: Enable efficient polling by providing 'session' (random identifier) and 'counter' (starts at 0, increments each call) parameters. In live mode, only magnets that changed since the last call are returned, significantly reducing bandwidth usage. The response includes an updated 'counter' value to use in the next request. Ideal for real-time monitoring of torrent download progress.",
+        "operationId": "getMagnetStatus",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "**Standard Mode**: Get status of a specific magnet by its ID. Incompatible with Live Mode parameters.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "**Standard Mode**: Filter magnets by status. Possible values: 'active', 'ready', 'expired', 'error'. Incompatible with Live Mode parameters.",
+            "schema": {
+              "type": "string",
+              "enum": ["active", "ready", "expired", "error"]
+            }
+          },
+          {
+            "name": "session",
+            "in": "query",
+            "description": "**Live Mode**: Random session identifier (e.g., random number between 1-1000000) to track delta updates across requests. Required for Live Mode, must be used with 'counter' parameter.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "counter",
+            "in": "query",
+            "description": "**Live Mode**: Counter starting at 0 for the first request, then use the 'counter' value returned in the response for subsequent requests. Required for Live Mode, must be used with 'session' parameter.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiSuccessResponseBase"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/MagnetStatusResponseData"
+                    }
+                  }
+                },
+                "examples": {
+                  "success": {
+                    "value": {
+                      "status": "success",
+                      "data": {
+                        "magnets": [
+                          {
+                            "id": 123456,
+                            "filename": "ubuntu-16.04.2-live-server-amd64.iso",
+                            "size": 587400285,
+                            "status": "Downloading",
+                            "statusCode": 1,
+                            "downloaded": 255400192,
+                            "uploaded": 0,
+                            "seeders": 7,
+                            "downloadSpeed": 18874368,
+                            "uploadSpeed": 0
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Successful response"
+          }
+        }
+      }
+    },
+    "/magnet/files": {
+      "post": {
+        "tags": ["Magnets"],
+        "summary": "Arbre des fichiers d'un magnet",
+        "description": "Retrieves the complete file tree structure for one or more ready magnets. Returns file names, sizes, and direct download links for each file in the torrent. Files are organized in a hierarchical structure mirroring the original torrent layout. Only works for magnets with ready status.",
+        "operationId": "getMagnetFiles",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id[]",
+            "in": "query",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiSuccessResponseBase"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/MagnetFilesResponseData"
+                    }
+                  }
+                },
+                "examples": {
+                  "success": {
+                    "value": {
+                      "status": "success",
+                      "data": {
+                        "magnets": [
+                          {
+                            "id": 123,
+                            "files": [
+                              {
+                                "n": "ubuntu-24.10-desktop-amd64.iso",
+                                "s": 5665497088,
+                                "l": ["https://alldebrid.com/f/xxxxxx"]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Successful response"
+          }
+        }
+      }
+    },
+    "/magnet/delete": {
+      "post": {
+        "tags": ["Magnets"],
+        "summary": "Supprimer un magnet",
+        "description": "Permanently deletes a magnet from your account. This removes the torrent from your magnet list and frees up a magnet slot. The files may remain cached on AllDebrid servers but will no longer be associated with your account. Cannot be undone.",
+        "operationId": "deleteMagnet",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiSuccessResponseBase"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/MessageResponseData"
+                    }
+                  }
+                },
+                "examples": {
+                  "success": {
+                    "value": {
+                      "status": "success",
+                      "data": {
+                        "message": "Magnet was successfully deleted"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Successful response"
+          }
+        }
+      }
+    },
+    "/magnet/restart": {
+      "post": {
+        "tags": ["Magnets"],
+        "summary": "Redémarrer des magnets",
+        "description": "Restarts one or more magnets that have failed or stalled. This requeues the torrents for processing and attempts to download them again. Useful for handling temporary errors or magnets that stopped downloading. Can accept multiple magnet IDs to restart in batch.",
+        "operationId": "restartMagnet",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "ids[]",
+            "in": "query",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiSuccessResponseBase"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/MessageResponseData"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Successful response"
+          }
+        }
+      }
+    },
+    "/user/links": {
+      "get": {
+        "tags": ["Library"],
+        "summary": "Liens sauvegardés",
+        "description": "Retrieves all links saved to the user's personal library. The saved links feature allows users to bookmark file hosting URLs for later access. Returns link URL, filename, size, save date, and host information for each saved link.",
+        "operationId": "getSavedLinks",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiSuccessResponseBase"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/SavedLinksResponseData"
+                    }
+                  }
+                },
+                "examples": {
+                  "success": {
+                    "value": {
+                      "status": "success",
+                      "data": {
+                        "links": [
+                          {
+                            "link": "https://example.com/somefile1",
+                            "filename": "somefile1.txt",
+                            "size": 751267520,
+                            "date": 1569420668,
+                            "host": "example"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Successful response"
+          }
+        }
+      }
+    },
+    "/user/links/save": {
+      "post": {
+        "tags": ["Library"],
+        "summary": "Sauvegarder des liens",
+        "description": "Saves one or more file hosting links to the user's personal library for later access. This bookmarks the links without unlocking them. Useful for organizing links you want to download later. Supports batch operations with multiple links at once.",
+        "operationId": "saveLinks",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "links[]",
+            "in": "query",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiSuccessResponseBase"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/MessageResponseData"
+                    }
+                  }
+                },
+                "examples": {
+                  "success": {
+                    "value": {
+                      "status": "success",
+                      "data": {
+                        "message": "Link was successfully saved"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Successful response"
+          }
+        }
+      }
+    },
+    "/user/links/delete": {
+      "post": {
+        "tags": ["Library"],
+        "summary": "Supprimer des liens sauvegardés",
+        "description": "Removes one or more links from the user's saved links library. This permanently deletes the bookmarks (not the actual files). Useful for cleaning up your library. Supports batch deletion of multiple links at once.",
+        "operationId": "deleteSavedLinks",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "links[]",
+            "in": "query",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiSuccessResponseBase"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/MessageResponseData"
+                    }
+                  }
+                },
+                "examples": {
+                  "success": {
+                    "value": {
+                      "status": "success",
+                      "data": {
+                        "message": "Link was successfully deleted"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Successful response"
+          }
+        }
+      }
+    },
+    "/user/history": {
+      "get": {
+        "tags": ["Library"],
+        "summary": "Historique récent des liens débridés",
+        "description": "Retrieves the user's recent download history - links that have been successfully unlocked in the past 3 days. This is automatically maintained by AllDebrid and provides a quick way to re-access recently downloaded files. Limited to the most recent entries.",
+        "operationId": "getHistory",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiSuccessResponseBase"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/SavedLinksResponseData"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Successful response"
+          }
+        }
+      }
+    },
+    "/user/history/delete": {
+      "post": {
+        "tags": ["Library"],
+        "summary": "Vider l'historique",
+        "description": "Clears the entire download history for the user. This removes all records of recently unlocked links from the history. Cannot be undone. The actual downloaded files remain accessible if you have the direct links, but the history list will be empty.",
+        "operationId": "deleteHistory",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiSuccessResponseBase"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/MessageResponseData"
+                    }
+                  }
+                },
+                "examples": {
+                  "success": {
+                    "value": {
+                      "status": "success",
+                      "data": {
+                        "message": "Links were successfully deleted"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Successful response"
+          }
+        }
+      }
+    },
+    "/voucher/balance": {
+      "get": {
+        "tags": ["Vouchers"],
+        "summary": "Solde vouchers revendeur",
+        "description": "Retrieves the current balance (in euros) for a reseller account. Reseller accounts can generate premium voucher codes that can be sold or distributed. This endpoint shows how much credit remains available for generating new vouchers. Only available for authorized reseller accounts.",
+        "operationId": "getVoucherBalance",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiSuccessResponseBase"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/VoucherBalanceResponseData"
+                    }
+                  }
+                },
+                "examples": {
+                  "success": {
+                    "value": {
+                      "status": "success",
+                      "data": {
+                        "balance": 51.6
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Successful response"
+          }
+        }
+      }
+    },
+    "/voucher/generate": {
+      "post": {
+        "tags": ["Vouchers"],
+        "summary": "Générer de nouveaux vouchers (revendeur)",
+        "operationId": "generateVouchers",
+        "security": [{ "bearerAuth": [] }],
+        "description": "Generates new premium voucher codes by debiting the reseller balance. Each voucher code can be redeemed for AllDebrid premium access for the specified duration (15, 30, 90, 180, or 365 days). Returns the generated codes, price per voucher, total cost, and remaining balance. Maximum 10 vouchers per request. Only available for authorized reseller accounts.",
+        "parameters": [
+          {
+            "name": "duration",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "integer", "enum": [15, 30, 90, 180, 365] },
+            "description": "Durée du voucher en jours"
+          },
+          {
+            "name": "nb",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "integer", "minimum": 1, "maximum": 10 },
+            "description": "Nombre de vouchers à générer (1-10)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Vouchers générés avec succès",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [{ "$ref": "#/components/schemas/ApiSuccessResponseBase" }],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/VoucherGenerateResponseData"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/voucher/get": {
+      "post": {
+        "tags": ["Vouchers"],
+        "summary": "Récupérer des vouchers pré-générés disponibles (revendeur)",
+        "operationId": "getAvailableVouchers",
+        "security": [{ "bearerAuth": [] }],
+        "description": "Retrieves pre-generated voucher codes from the reseller's inventory without generating new ones. This endpoint fetches vouchers that were previously generated and are available in stock. If fewer vouchers are available than requested, returns a partial list with 'partialList: true'. Does not debit the reseller balance. Maximum 10 vouchers per request. Only available for authorized reseller accounts.",
+        "parameters": [
+          {
+            "name": "duration",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "integer", "enum": [15, 30, 90, 180, 365] },
+            "description": "Durée du voucher en jours"
+          },
+          {
+            "name": "nb",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "integer", "minimum": 1, "maximum": 10 },
+            "description": "Nombre de vouchers demandés (1-10)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Vouchers disponibles récupérés",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [{ "$ref": "#/components/schemas/ApiSuccessResponseBase" }],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/VoucherGetResponseData"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   }

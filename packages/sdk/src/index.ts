@@ -35,15 +35,15 @@ export {
 // Re-export generated types
 export type * from './generated/types.gen.js'
 
+// Export resources
 export { HostResource } from './resources/host.js'
 export { LinkResource } from './resources/link.js'
-// Export resource types
 export type { PollOptions } from './resources/link.js'
 export { MagnetResource } from './resources/magnet.js'
-
-export type { WatchOptions } from './resources/magnet.js'
-// Export resources
+export type { LiveStatusOptions, WatchOptions } from './resources/magnet.js'
+export { PinResource } from './resources/pin.js'
 export { UserResource } from './resources/user.js'
+export { VoucherResource } from './resources/voucher.js'
 
 // Export types
 export type { AllDebridConfig, ApiError, ApiResponse } from './types.js'

@@ -1,9 +1,9 @@
 import type {
-  GetLinkDelayedResponse,
+  GetDelayedStatusResponse,
   GetLinkInfosResponse,
-  GetLinkRedirectorResponse,
-  GetLinkStreamingResponse,
-  GetLinkUnlockResponse,
+  GetRedirectorLinksResponse,
+  GetStreamingLinkResponse,
+  UnlockLinkResponse,
 } from '../generated/types.gen.js'
 import { BaseResource } from '../base-resource.js'
 
@@ -37,18 +37,28 @@ export class LinkResource extends BaseResource {
    * Get information about one or more links
    *
    * @param links - Single link or array of links to get info for
+   * @param password - Optional password for password-protected links
    *
    * @example
    * ```ts
    * const info = await client.link.infos('https://example.com/file.zip')
    * console.log(info)
+   *
+   * // With password
+   * const protectedInfo = await client.link.infos(
+   *   'https://example.com/protected.zip',
+   *   'mypassword'
+   * )
    * ```
    */
-  async infos(links: string | string[]) {
+  async infos(links: string | string[], password?: string) {
     const linksArray = Array.isArray(links) ? links : [links]
-    const data = await this.get<GetLinkInfosResponse>('/link/infos', {
-      link: linksArray,
-    })
+    const params = password ? { password } : undefined
+    const data = await this.post<GetLinkInfosResponse>(
+      '/link/infos',
+      { 'link[]': linksArray },
+      params,
+    )
     return data?.infos
   }
 
@@ -63,7 +73,7 @@ export class LinkResource extends BaseResource {
    * ```
    */
   async redirector(link: string) {
-    const data = await this.get<GetLinkRedirectorResponse>('/link/redirector', {
+    const data = await this.post<GetRedirectorLinksResponse>('/link/redirector', {
       link,
     })
     return data?.links
@@ -73,6 +83,7 @@ export class LinkResource extends BaseResource {
    * Unlock a download link
    *
    * @param link - The link to unlock
+   * @param password - Optional password for password-protected links
    *
    * @example
    * ```ts
@@ -83,12 +94,17 @@ export class LinkResource extends BaseResource {
    *   // Handle delayed generation
    *   const delayedResult = await client.link.delayed(result.delayed)
    * }
+   *
+   * // With password
+   * const protectedResult = await client.link.unlock(
+   *   'https://example.com/protected.zip',
+   *   'mypassword'
+   * )
    * ```
    */
-  async unlock(link: string) {
-    return this.get<GetLinkUnlockResponse>('/link/unlock', {
-      link,
-    })
+  async unlock(link: string, password?: string) {
+    const params = password ? { password } : undefined
+    return this.post<UnlockLinkResponse>('/link/unlock', { link }, params)
   }
 
   /**
@@ -121,9 +137,10 @@ export class LinkResource extends BaseResource {
    * const streams = await client.link.streaming('abc123')
    * ```
    */
-  async streaming(id: string) {
-    return this.get<GetLinkStreamingResponse>('/link/streaming', {
+  async streaming(id: string, stream: string) {
+    return this.post<GetStreamingLinkResponse>('/link/streaming', {
       id,
+      stream,
     })
   }
 
@@ -137,8 +154,8 @@ export class LinkResource extends BaseResource {
    * const result = await client.link.delayed('delayed_id_123')
    * ```
    */
-  async delayed(id: string) {
-    return this.get<GetLinkDelayedResponse>('/link/delayed', {
+  async delayed(id: number) {
+    return this.post<GetDelayedStatusResponse>('/link/delayed', {
       id,
     })
   }

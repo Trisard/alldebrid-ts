@@ -1,6 +1,6 @@
 # AllDebrid TypeScript SDK
 
-Modern, type-safe TypeScript SDK for the AllDebrid API.
+Modern, type-safe TypeScript SDK for the AllDebrid API v4.1.
 
 ## 📦 Packages
 
@@ -30,6 +30,11 @@ try {
   // Unlock a link
   const unlocked = await client.link.unlock('https://example.com/file.zip')
   console.log(unlocked.link)
+
+  // PIN authentication flow
+  const pinData = await client.pin.generate()
+  console.log('Visit:', pinData.user_url)
+  const apikey = await client.pin.waitForAuth(pinData.check, pinData.pin)
 } catch (error) {
   if (error instanceof AuthenticationError) {
     console.error('Invalid API key:', error.message)
@@ -50,7 +55,7 @@ See the [@adbjs/sdk README](./packages/sdk/README.md) for full documentation.
 - 📦 **Tree-shakeable** - ESM + CJS, import only what you need
 - 🔄 **Auto-retry** - Built-in retry logic with configurable attempts
 - 🎨 **Developer-friendly** - Intuitive API with JSDoc comments
-- 🔥 **Complete API coverage** - All AllDebrid API endpoints implemented
+- 🔥 **Complete API v4.1 coverage** - All AllDebrid API v4.1 endpoints implemented and optimized
 - ⚡ **Minimal footprint** - Only one runtime dependency (wretch)
 - 🛡️ **Typed error handling** - Specific error classes for better error management
 
@@ -88,7 +93,7 @@ alldebrid-ts/
 │   ├── sdk/                 # Core TypeScript SDK
 │   │   ├── src/
 │   │   │   ├── client.ts    # Main client class
-│   │   │   ├── resources/   # API resources (user, link, magnet, host)
+│   │   │   ├── resources/   # API resources (user, link, magnet, host, pin, voucher)
 │   │   │   ├── types.ts     # Core types
 │   │   │   ├── errors.ts    # Error classes
 │   │   │   └── generated/   # Auto-generated types from OpenAPI

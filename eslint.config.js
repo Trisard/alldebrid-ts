@@ -1,6 +1,7 @@
 import antfu from '@antfu/eslint-config'
 
-export default antfu(
+/** @type {ReturnType<typeof antfu>} */
+const config = antfu(
   {
     // Type-aware rules pour TypeScript
     typescript: {
@@ -69,3 +70,5 @@ export default antfu(
     },
   },
 )
+
+export default config

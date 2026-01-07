@@ -1,12 +1,15 @@
+import type { PingResponse } from './generated/types.gen.js'
 import type { AllDebridConfig, ApiResponse, ExtractData } from './types.js'
 import wretch from 'wretch'
 import { createTypedError, NetworkError } from './errors.js'
 import { HostResource } from './resources/host.js'
 import { LinkResource } from './resources/link.js'
 import { MagnetResource } from './resources/magnet.js'
+import { PinResource } from './resources/pin.js'
 import { UserResource } from './resources/user.js'
+import { VoucherResource } from './resources/voucher.js'
 
-const DEFAULT_BASE_URL = 'https://api.alldebrid.com/v4'
+const DEFAULT_BASE_URL = 'https://api.alldebrid.com/v4.1'
 const DEFAULT_AGENT = '@alldebrid/sdk'
 const DEFAULT_TIMEOUT = 30000
 const DEFAULT_MAX_RETRIES = 3
@@ -37,6 +40,16 @@ export class AllDebridClient {
    */
   public readonly host: HostResource
 
+  /**
+   * Pin resource for PIN-based authentication
+   */
+  public readonly pin: PinResource
+
+  /**
+   * Voucher resource for reseller voucher management
+   */
+  public readonly voucher: VoucherResource
+
   constructor(config: AllDebridConfig) {
     // Merge config with defaults
     this.config = {
@@ -53,6 +66,8 @@ export class AllDebridClient {
     this.link = new LinkResource(this)
     this.magnet = new MagnetResource(this)
     this.host = new HostResource(this)
+    this.pin = new PinResource(this)
+    this.voucher = new VoucherResource(this)
   }
 
   /**
@@ -81,10 +96,13 @@ export class AllDebridClient {
 
   /**
    * Make a GET request
-   * @param T - The generated response type (e.g., GetLinkUnlockResponse)
+   * @template T - The generated response type (e.g., GetLinkUnlockResponse)
+   * @param path - API endpoint path
+   * @param params - Optional query parameters
    * @returns The extracted data from the response (without the { status, data } wrapper)
+   * @internal
    */
-  protected async get<T>(path: string, params?: Record<string, unknown>): Promise<ExtractData<T>> {
+  async get<T>(path: string, params?: Record<string, unknown>): Promise<ExtractData<T>> {
     try {
       const url = this.buildUrl(path, params)
       const json = await wretch(this.config.baseUrl)
@@ -122,21 +140,42 @@ export class AllDebridClient {
   }
 
   /**
-   * Make a POST request
-   * @param T - The generated response type
+   * Make a POST request with application/x-www-form-urlencoded
+   * @template T - The generated response type
+   * @param path - API endpoint path
+   * @param body - Request body (will be converted to URLSearchParams)
+   * @param params - Optional query parameters
    * @returns The extracted data from the response (without the { status, data } wrapper)
+   * @internal
    */
-  protected async post<T>(
+  async post<T>(
     path: string,
     body?: unknown,
     params?: Record<string, unknown>,
   ): Promise<ExtractData<T>> {
     try {
       const url = this.buildUrl(path, params)
+
+      // Convert body to URLSearchParams for application/x-www-form-urlencoded
+      const formData = new URLSearchParams()
+      if (body && typeof body === 'object') {
+        for (const [key, value] of Object.entries(body)) {
+          if (value !== undefined && value !== null) {
+            if (Array.isArray(value)) {
+              // Handle arrays (e.g., link[] for multiple links)
+              value.forEach((v) => formData.append(key, String(v)))
+            } else {
+              formData.append(key, String(value))
+            }
+          }
+        }
+      }
+
       const json = await wretch(this.config.baseUrl)
         .auth(`Bearer ${this.config.apiKey}`)
         .url(url)
-        .post(body)
+        .body(formData)
+        .post()
         .json<ApiResponse<unknown>>()
 
       // Handle error responses
@@ -169,10 +208,14 @@ export class AllDebridClient {
 
   /**
    * Make a POST request with FormData (multipart/form-data)
-   * @param T - The generated response type
+   * @template T - The generated response type
+   * @param path - API endpoint path
+   * @param formData - Form data to send
+   * @param params - Optional query parameters
    * @returns The extracted data from the response (without the { status, data } wrapper)
+   * @internal
    */
-  protected async postFormData<T>(
+  async postFormData<T>(
     path: string,
     formData: FormData,
     params?: Record<string, unknown>,
@@ -216,13 +259,19 @@ export class AllDebridClient {
 
   /**
    * Test the API connection
+   *
+   * This endpoint doesn't require authentication and can be used to verify
+   * that the AllDebrid API is reachable.
+   *
+   * @example
+   * ```ts
+   * const result = await client.ping()
+   * console.log(result.ping) // 'pong'
+   * ```
+   *
+   * @returns Ping response with 'pong' message
    */
-  async ping(): Promise<boolean> {
-    try {
-      await this.get('/user')
-      return true
-    } catch {
-      return false
-    }
+  async ping() {
+    return this.get<PingResponse>('/ping')
   }
 }

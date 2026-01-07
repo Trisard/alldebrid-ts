@@ -11,17 +11,21 @@ export abstract class BaseResource {
 
   /**
    * Make a GET request
-   * @param T - The generated response type (e.g., GetLinkUnlockResponse)
+   * @template T - The generated response type (e.g., GetLinkUnlockResponse)
+   * @param path - API endpoint path
+   * @param params - Optional query parameters
    * @returns The extracted data from the response (without the { status, data } wrapper)
    */
   protected async get<T>(path: string, params?: Record<string, unknown>): Promise<ExtractData<T>> {
-    const clientAny = this.client as any
-    return clientAny.get(path, params) as Promise<ExtractData<T>>
+    return this.client.get<T>(path, params)
   }
 
   /**
    * Make a POST request
-   * @param T - The generated response type
+   * @template T - The generated response type
+   * @param path - API endpoint path
+   * @param body - Request body
+   * @param params - Optional query parameters
    * @returns The extracted data from the response (without the { status, data } wrapper)
    */
   protected async post<T>(
@@ -29,13 +33,15 @@ export abstract class BaseResource {
     body?: unknown,
     params?: Record<string, unknown>,
   ): Promise<ExtractData<T>> {
-    const clientAny = this.client as any
-    return clientAny.post(path, body, params) as Promise<ExtractData<T>>
+    return this.client.post<T>(path, body, params)
   }
 
   /**
    * Make a POST request with FormData (multipart/form-data)
-   * @param T - The generated response type
+   * @template T - The generated response type
+   * @param path - API endpoint path
+   * @param formData - Form data to send
+   * @param params - Optional query parameters
    * @returns The extracted data from the response (without the { status, data } wrapper)
    */
   protected async postFormData<T>(
@@ -43,7 +49,6 @@ export abstract class BaseResource {
     formData: FormData,
     params?: Record<string, unknown>,
   ): Promise<ExtractData<T>> {
-    const clientAny = this.client as any
-    return clientAny.postFormData(path, formData, params) as Promise<ExtractData<T>>
+    return this.client.postFormData<T>(path, formData, params)
   }
 }
