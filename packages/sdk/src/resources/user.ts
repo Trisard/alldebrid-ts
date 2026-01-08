@@ -21,13 +21,12 @@ export class UserResource extends BaseResource {
    *
    * @example
    * ```ts
-   * const user = await client.user.getInfo()
-   * console.log(user.username, user.isPremium)
+   * const data = await client.user.getInfo()
+   * console.log(data.user.username, data.user.isPremium)
    * ```
    */
   async getInfo() {
-    const data = await this.get<GetUserResponse>('/user')
-    return data?.user
+    return this.get<GetUserResponse>('/user')
   }
 
   /**

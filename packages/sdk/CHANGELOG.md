@@ -5,6 +5,53 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - 2026-01-08
+
+### Breaking Changes
+
+#### Response Normalization
+
+All SDK methods now consistently return `data` objects instead of extracting nested fields. This provides better access to metadata and maintains consistency across all endpoints.
+
+**Affected Methods:**
+
+- **`magnet.files()`**: Now returns `{ magnets: [...] }` instead of just the array
+  - **Before**: `const files = await client.magnet.files(123); files.forEach(...)`
+  - **After**: `const data = await client.magnet.files(123); data.magnets.forEach(...)`
+
+- **`link.infos()`**: Now returns `{ infos: [...] }` instead of just the array
+  - **Before**: `const infos = await client.link.infos('url'); infos.forEach(...)`
+  - **After**: `const data = await client.link.infos('url'); data.infos.forEach(...)`
+
+- **`link.redirector()`**: Now returns `{ links: [...] }` instead of just the array
+  - **Before**: `const links = await client.link.redirector('url'); links.forEach(...)`
+  - **After**: `const data = await client.link.redirector('url'); data.links.forEach(...)`
+
+- **`user.getInfo()`**: Now returns `{ user: {...} }` instead of just the user object
+  - **Before**: `const user = await client.user.getInfo(); console.log(user.username)`
+  - **After**: `const data = await client.user.getInfo(); console.log(data.user.username)`
+
+#### Watch Method Simplification
+
+- **`magnet.watch()`**: Removed `useLiveMode` option to simplify the API
+  - **Before**: `await client.magnet.watch(id, { useLiveMode: true })`
+  - **After**: Use `client.magnet.statusLive()` directly for live mode functionality
+  - **Migration**: For simple single-magnet watching, use `watch()` without options. For advanced multi-magnet monitoring with bandwidth optimization, use `statusLive()` directly (see documentation for examples).
+
+### Added
+
+- **Enhanced `statusLive()` Documentation**: Comprehensive guide on using live mode for efficient multi-magnet monitoring
+  - Detailed explanation of delta synchronization mechanism
+  - Complete example showing how to track multiple magnets with minimal bandwidth
+  - Clear warnings about the deprecated `id` parameter
+  - When to use live mode vs simple `watch()`
+
+### Improved
+
+- **Consistent API Design**: All methods now follow the same pattern of returning the complete `data` object
+- **Better Metadata Access**: Users can now access response metadata (like `counter` in live mode) without special handling
+- **Clearer Method Purpose**: `watch()` is now purely for simple single-magnet polling, while `statusLive()` is explicitly for advanced multi-magnet scenarios
+
 ## [1.0.0] - 2026-01-07
 
 ### Added

@@ -41,11 +41,11 @@ export class LinkResource extends BaseResource {
    *
    * @example
    * ```ts
-   * const info = await client.link.infos('https://example.com/file.zip')
-   * console.log(info)
+   * const data = await client.link.infos('https://example.com/file.zip')
+   * console.log(data.infos)
    *
    * // With password
-   * const protectedInfo = await client.link.infos(
+   * const protectedData = await client.link.infos(
    *   'https://example.com/protected.zip',
    *   'mypassword'
    * )
@@ -54,12 +54,7 @@ export class LinkResource extends BaseResource {
   async infos(links: string | string[], password?: string) {
     const linksArray = Array.isArray(links) ? links : [links]
     const params = password ? { password } : undefined
-    const data = await this.post<GetLinkInfosResponse>(
-      '/link/infos',
-      { 'link[]': linksArray },
-      params,
-    )
-    return data?.infos
+    return this.post<GetLinkInfosResponse>('/link/infos', { 'link[]': linksArray }, params)
   }
 
   /**
@@ -69,14 +64,14 @@ export class LinkResource extends BaseResource {
    *
    * @example
    * ```ts
-   * const links = await client.link.redirector('https://linkprotector.com/abc123')
+   * const data = await client.link.redirector('https://linkprotector.com/abc123')
+   * console.log(data.links)
    * ```
    */
   async redirector(link: string) {
-    const data = await this.post<GetRedirectorLinksResponse>('/link/redirector', {
+    return this.post<GetRedirectorLinksResponse>('/link/redirector', {
       link,
     })
-    return data?.links
   }
 
   /**

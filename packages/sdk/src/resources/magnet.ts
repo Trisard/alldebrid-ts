@@ -51,13 +51,6 @@ export interface WatchOptions {
    * @default 'Ready'
    */
   stopOnStatus?: string
-
-  /**
-   * Use live mode for reduced bandwidth (delta sync)
-   * When enabled, only changes are transmitted instead of full status
-   * @default false
-   */
-  useLiveMode?: boolean
 }
 
 /**
@@ -166,16 +159,38 @@ export class MagnetResource extends BaseResource {
   }
 
   /**
-   * Get magnet status using live mode for reduced bandwidth consumption
+   * Get magnet status using live mode for bandwidth-optimized delta synchronization
    *
-   * Live mode uses delta synchronization - only changes since the last call are transmitted.
-   * On the first call (counter=0), all data is returned with `fullsync: true`.
-   * Subsequent calls return only modifications.
+   * Live mode is designed for monitoring multiple magnets efficiently by only transmitting
+   * changes between polling intervals, drastically reducing bandwidth usage for dashboards
+   * and real-time monitoring applications.
    *
-   * @param options - Live mode options
-   * @param options.session - Session ID (generate once per session and reuse)
-   * @param options.counter - Synchronization counter (start at 0, use returned counter for next call)
-   * @param id - Optional magnet ID to filter a specific magnet
+   * ## How it works
+   *
+   * 1. **Session initialization**: Generate a random session ID and start with counter = 0
+   * 2. **First call (fullsync)**: Returns ALL magnets with `fullsync: true`
+   * 3. **Update counter**: Use the `counter` value returned by the API for the next call
+   * 4. **Subsequent calls (delta)**: Returns ONLY magnets that changed since last call
+   * 5. **Repeat**: Keep calling with updated counter to receive only deltas
+   *
+   * ## When to use
+   *
+   * - ✅ Monitoring multiple active magnets simultaneously
+   * - ✅ Building real-time dashboards
+   * - ✅ High-frequency polling scenarios (every few seconds)
+   * - ❌ Watching a single specific magnet (use `watch()` instead)
+   *
+   * ## Important notes
+   *
+   * - **Don't use the `id` parameter**: Passing an ID defeats the purpose of live mode
+   *   as it disables delta sync and behaves like a regular `status()` call
+   * - **Session persistence**: Keep the same session ID for the entire monitoring session
+   * - **Counter tracking**: Always update the counter with the value returned by the API
+   * - **Empty deltas**: When no magnets changed, `magnets` will be an empty array
+   *
+   * @param options - Live mode session options
+   * @param options.session - Unique session ID (generate once: `Math.floor(Math.random() * 1000000)`)
+   * @param options.counter - Sync counter (start at 0, then use value from previous API response)
    *
    * @example
    * ```ts
@@ -183,34 +198,63 @@ export class MagnetResource extends BaseResource {
    * const session = Math.floor(Math.random() * 1000000)
    * let counter = 0
    *
-   * // First call - full sync
+   * // First call - returns all magnets (fullsync: true)
    * const firstCall = await client.magnet.statusLive({ session, counter })
    * console.log('Full sync:', firstCall.fullsync) // true
-   * console.log('All magnets:', firstCall.magnets)
+   * console.log('All magnets:', firstCall.magnets) // Array of all magnets
+   * counter = firstCall.counter // Update counter for next call
    *
-   * // Update counter with value returned by API
-   * counter = firstCall.counter
-   *
-   * // Second call - only changes
+   * // Second call - returns only magnets that changed
+   * await new Promise(resolve => setTimeout(resolve, 3000)) // Wait 3 seconds
    * const secondCall = await client.magnet.statusLive({ session, counter })
-   * console.log('Delta sync:', secondCall.magnets) // Only modified magnets
+   * console.log('Delta sync:', secondCall.magnets) // Only changed magnets
+   * counter = secondCall.counter
    *
-   * // Filter specific magnet in live mode
-   * const magnetLive = await client.magnet.statusLive({ session, counter }, 123)
+   * // Example: Monitor all magnets until none are active
+   * const activeMagnets = new Map()
+   *
+   * while (true) {
+   *   const response = await client.magnet.statusLive({ session, counter })
+   *   counter = response.counter ?? counter
+   *
+   *   // Update our local state with changes
+   *   if (response.fullsync) {
+   *     activeMagnets.clear()
+   *     response.magnets?.forEach(m => activeMagnets.set(m.id, m))
+   *   } else {
+   *     response.magnets?.forEach(m => {
+   *       if (m.status === 'Ready' || m.status === 'Error' || m.status === 'Expired') {
+   *         activeMagnets.delete(m.id)
+   *       } else {
+   *         activeMagnets.set(m.id, m)
+   *       }
+   *     })
+   *   }
+   *
+   *   // Display current state
+   *   console.log(`Active downloads: ${activeMagnets.size}`)
+   *   activeMagnets.forEach(m => {
+   *     console.log(`  ${m.filename}: ${m.status} - ${m.downloaded}/${m.size} bytes`)
+   *   })
+   *
+   *   // Stop when no more active magnets
+   *   if (activeMagnets.size === 0) {
+   *     console.log('All downloads completed!')
+   *     break
+   *   }
+   *
+   *   await new Promise(resolve => setTimeout(resolve, 3000))
+   * }
    * ```
    *
    * @remarks
-   * This is ideal for real-time dashboards or frequent polling scenarios
-   * as it significantly reduces bandwidth usage by transmitting only changes.
+   * This method is ideal for scenarios where you're monitoring multiple magnets and want
+   * to minimize bandwidth. For simple single-magnet monitoring, use `watch()` instead.
    */
-  async statusLive(options: LiveStatusOptions, id?: number) {
+  async statusLive(options: LiveStatusOptions) {
     const body: any = {
       session: options.session,
       counter: options.counter,
-    }
-
-    if (id !== undefined) {
-      body.id = id
     }
 
     return this.post<GetMagnetStatusResponse>('/magnet/status', body)
@@ -260,9 +304,9 @@ export class MagnetResource extends BaseResource {
    *
    * @example
    * ```ts
-   * const files = await client.magnet.files(123)
-   * files?.forEach(file => {
-   *   console.log(file.filename, file.link)
+   * const data = await client.magnet.files(123)
+   * data?.magnets?.forEach(magnet => {
+   *   console.log(magnet.filename, magnet.files)
    * })
    * ```
    *
@@ -276,12 +320,15 @@ export class MagnetResource extends BaseResource {
     for (const id of idsArray) {
       formData.append('id[]', String(id))
     }
-    const data = await this.postFormData<GetMagnetFilesResponse>('/magnet/files', formData)
-    return data?.magnets
+    return this.postFormData<GetMagnetFilesResponse>('/magnet/files', formData)
   }
 
   /**
    * Watch a magnet's status with automatic polling
+   *
+   * This is a simple helper that polls the status of a specific magnet until it reaches
+   * a target status (default: 'Ready'). For advanced use cases with multiple magnets
+   * or bandwidth optimization, use `statusLive()` directly instead.
    *
    * @param id - The magnet ID to watch
    * @param options - Watch options
@@ -289,60 +336,32 @@ export class MagnetResource extends BaseResource {
    * @param options.maxAttempts - Maximum polling attempts, 0 for infinite (default: 0)
    * @param options.onUpdate - Callback called on each status update
    * @param options.stopOnStatus - Stop when magnet reaches this status (default: 'Ready')
-   * @param options.useLiveMode - Use live mode for reduced bandwidth (default: false)
    *
    * @example
    * ```ts
-   * // Standard mode
    * await client.magnet.watch(123, {
    *   onUpdate: (status) => console.log('Status:', status.magnets[0]?.status),
    *   stopOnStatus: 'Ready'
    * })
-   *
-   * // Live mode for reduced bandwidth
-   * await client.magnet.watch(123, {
-   *   useLiveMode: true,
-   *   interval: 2000,
-   *   onUpdate: (status) => console.log('Update:', status)
-   * })
    * ```
+   *
+   * @remarks
+   * For monitoring multiple magnets efficiently, use `statusLive()` directly.
+   * See the `statusLive()` documentation for details on delta synchronization.
    */
   async watch(id: number, options: WatchOptions = {}) {
-    const {
-      interval = 3000,
-      maxAttempts = 0,
-      onUpdate,
-      stopOnStatus = 'Ready',
-      useLiveMode = false,
-    } = options
+    const { interval = 3000, maxAttempts = 0, onUpdate, stopOnStatus = 'Ready' } = options
 
     let attempt = 0
-
-    // Live mode session state
-    let session: number | undefined
-    let counter = 0
-
-    if (useLiveMode) {
-      session = Math.floor(Math.random() * 1000000)
-    }
 
     while (maxAttempts === 0 || attempt < maxAttempts) {
       attempt++
 
-      // Use appropriate status method based on mode
-      const status =
-        useLiveMode && session !== undefined
-          ? await this.statusLive({ session, counter }, id)
-          : await this.status(id)
-
-      // Update counter for next live mode call
-      if (useLiveMode && status?.counter !== undefined) {
-        counter = status.counter
-      }
+      const status = await this.status(id)
 
       onUpdate?.(status)
 
-      // Check if we should stop (magnets is an array)
+      // Check if we should stop (magnets is normalized to an array with one element)
       const magnet = status?.magnets?.[0]
       if (magnet?.status === stopOnStatus) {
         return status
