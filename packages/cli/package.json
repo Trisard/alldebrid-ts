@@ -1,0 +1,62 @@
+{
+  "name": "@adbjs/cli",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Command-line interface for AllDebrid API",
+  "author": "Trisard",
+  "license": "MIT",
+  "keywords": [
+    "alldebrid",
+    "debrid",
+    "cli",
+    "command-line",
+    "torrent",
+    "magnet",
+    "download"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Trisard/alldebrid-ts.git"
+  },
+  "homepage": "https://github.com/Trisard/alldebrid-ts#readme",
+  "bugs": {
+    "url": "https://github.com/Trisard/alldebrid-ts/issues"
+  },
+  "bin": {
+    "adb": "./dist/index.js"
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@adbjs/sdk": "workspace:*",
+    "@clack/prompts": "^0.9.1",
+    "chalk": "^5.4.1",
+    "commander": "^14.0.2",
+    "conf": "^13.1.0",
+    "ora": "^8.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2"
+  }
+}
