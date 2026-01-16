@@ -1,7 +1,7 @@
 {
   "name": "@adbjs/cli",
   "type": "module",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Command-line interface for AllDebrid API",
   "author": "Trisard",
   "license": "MIT",
@@ -47,7 +47,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@adbjs/sdk": "workspace:*",
+    "@adbjs/sdk": "^2.0.2",
     "@clack/prompts": "^0.9.1",
     "chalk": "^5.4.1",
     "commander": "^14.0.2",
