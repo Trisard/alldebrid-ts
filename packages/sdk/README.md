@@ -317,8 +317,8 @@ pnpm typecheck
 
 MIT
 
-## 🔗 Links
+## 🔗 Related
 
+- [@adbjs/cli](https://www.npmjs.com/package/@adbjs/cli) - Command-line interface for AllDebrid
 - [AllDebrid API Documentation](https://docs.alldebrid.com/)
 - [GitHub Repository](https://github.com/Trisard/alldebrid-ts)
-- [NPM Package](https://www.npmjs.com/package/@adbjs/sdk)
