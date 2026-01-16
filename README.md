@@ -11,6 +11,8 @@ This monorepo contains:
 
 ## 🚀 Quick Start
 
+### SDK
+
 ```bash
 npm install @adbjs/sdk
 ```
@@ -48,7 +50,34 @@ try {
 
 See the [@adbjs/sdk README](./packages/sdk/README.md) for full documentation.
 
+### CLI
+
+```bash
+npm install -g @adbjs/cli
+```
+
+```bash
+# Authenticate with AllDebrid
+adb auth login
+
+# Upload a magnet link
+adb magnet upload "magnet:?xt=urn:btih:..."
+
+# Watch download progress
+adb magnet watch 12345
+
+# Unlock a premium link
+adb link unlock "https://example.com/file.zip"
+
+# Get account info
+adb user info
+```
+
+See the [@adbjs/cli README](./packages/cli/README.md) for full documentation.
+
 ## ✨ Features
+
+### SDK
 
 - 🎯 **Type-safe** - Full TypeScript support with types generated from OpenAPI spec
 - 🚀 **Modern** - Built with latest tooling (wretch, vitest, pnpm)
@@ -58,6 +87,16 @@ See the [@adbjs/sdk README](./packages/sdk/README.md) for full documentation.
 - 🔥 **Complete API v4.1 coverage** - All AllDebrid API v4.1 endpoints implemented and optimized
 - ⚡ **Minimal footprint** - Only one runtime dependency (wretch)
 - 🛡️ **Typed error handling** - Specific error classes for better error management
+
+### CLI
+
+- 🔥 **Complete API Coverage** - Magnets, links, user management, hosts, and vouchers
+- 🎨 **Interactive Mode** - User-friendly prompts with beautiful TUI
+- 📊 **Real-time Monitoring** - Watch torrent progress with live updates
+- 🔧 **JSON Output** - `--json` flag for shell scripting and automation
+- ⚡ **Delta Sync** - Efficient polling with session-based updates
+- 🔐 **Secure Auth** - PIN-based authentication with local config storage
+- 💻 **Cross-platform** - Works on Windows, macOS, and Linux
 
 ## 🏗️ Development
 
