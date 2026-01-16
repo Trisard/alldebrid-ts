@@ -7,7 +7,7 @@ Modern, type-safe TypeScript SDK for the AllDebrid API v4.1.
 This monorepo contains:
 
 - **[@adbjs/sdk](./packages/sdk)** - Core TypeScript SDK for AllDebrid API
-- **@adbjs/cli** - Command-line interface (coming soon)
+- **[@adbjs/cli](./packages/cli)** - Command-line interface for AllDebrid
 
 ## 🚀 Quick Start
 
@@ -98,9 +98,14 @@ alldebrid-ts/
 │   │   │   ├── errors.ts    # Error classes
 │   │   │   └── generated/   # Auto-generated types from OpenAPI
 │   │   └── tests/           # Test files
-│   └── cli/                 # CLI (coming soon)
+│   └── cli/                 # Command-line interface
 └── pnpm-workspace.yaml
 ```
+
+## 📋 Roadmap
+
+- [ ] Migrate to Bun for faster builds and native executable compilation
+- [ ] Standalone executables for Windows, macOS, and Linux (no Node.js required)
 
 ## 📝 License
 
