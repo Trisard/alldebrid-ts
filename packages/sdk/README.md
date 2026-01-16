@@ -2,17 +2,18 @@
 
 Modern TypeScript SDK for the AllDebrid API v4.1.
 
-## Features
+## ✨ Features
 
-- ✨ **TypeScript-first** - Full type safety with auto-generated types from OpenAPI v4.1 spec
+- 🎯 **TypeScript-first** - Full type safety with auto-generated types from OpenAPI v4.1 spec
 - 🚀 **Modern** - Built with wretch, ESM + CJS support
 - 📦 **Tree-shakeable** - Import only what you need
 - 🔄 **Auto-retry** - Built-in retry logic with configurable options
-- 🎯 **Type-safe errors** - Typed error classes for better error handling
+- 🛡️ **Type-safe errors** - Typed error classes for better error handling
 - 📝 **Fully documented** - JSDoc comments with examples
 - ⚡ **API v4.1 optimized** - Designed and optimized for AllDebrid API v4.1
+- 💡 **Minimal footprint** - Only one runtime dependency (wretch)
 
-## Installation
+## 📦 Installation
 
 ```bash
 npm install @adbjs/sdk
@@ -22,7 +23,7 @@ pnpm add @adbjs/sdk
 yarn add @adbjs/sdk
 ```
 
-## Quick Start
+## 🚀 Quick Start
 
 ```typescript
 import { AllDebridClient } from '@adbjs/sdk'
@@ -45,14 +46,14 @@ const magnet = await client.magnet.upload('magnet:?xt=urn:btih:...')
 console.log('Magnet ID:', magnet.magnets[0].id)
 ```
 
-## API Reference
+## 📖 API Reference
 
 ### Client Configuration
 
 ```typescript
 const client = new AllDebridClient({
   apiKey: string          // Required: Your AllDebrid API key
-  agent?: string          // Optional: User agent (default: '@alldebrid/sdk')
+  agent?: string          // Optional: User agent (default: '@adbjs/sdk')
   baseUrl?: string        // Optional: API base URL
   timeout?: number        // Optional: Request timeout in ms (default: 30000)
   retry?: boolean         // Optional: Enable auto-retry (default: true)
@@ -171,10 +172,8 @@ counter = firstCall.counter // Important: Use the returned counter value
 const secondCall = await client.magnet.statusLive({ session, counter })
 console.log('Delta sync (only changes):', secondCall.magnets)
 
-// Live mode can also track a specific magnet
+// Update counter for subsequent calls
 counter = secondCall.counter
-const specificMagnet = await client.magnet.statusLive({ session, counter }, 123)
-console.log('Changes for magnet 123:', specificMagnet.magnets)
 
 // ===== Magnet management =====
 
@@ -192,25 +191,14 @@ files?.forEach((file) => {
 
 // ===== Watch: Monitor magnet progress with automatic polling =====
 
-// Standard mode: Full status check on each poll
+// Watch a magnet until it's ready
 await client.magnet.watch(123, {
   interval: 3000, // Check every 3 seconds
-  maxAttempts: 30, // Stop after 30 attempts
+  maxAttempts: 30, // Stop after 30 attempts (0 = infinite)
   stopOnStatus: 'Ready', // Stop when magnet is ready
   onUpdate: (status) => {
     const magnet = status.magnets[0]
     console.log(`Progress: ${magnet?.status} - ${magnet?.downloaded || 0}%`)
-  },
-})
-
-// Live mode: Delta sync for reduced bandwidth (recommended for long-running monitors)
-await client.magnet.watch(123, {
-  useLiveMode: true, // Enable live mode
-  interval: 2000, // Check every 2 seconds
-  maxAttempts: 0, // 0 = infinite polling
-  onUpdate: (status) => {
-    // Only called when the magnet status changes
-    console.log('Magnet updated:', status.magnets[0])
   },
 })
 ```
@@ -272,7 +260,7 @@ const newVouchers = await client.voucher.generateVouchers(10, 30)
 console.log('Generated vouchers:', newVouchers?.codes)
 ```
 
-## Error Handling
+## 🛡️ Error Handling
 
 The SDK provides typed error classes for better error handling:
 
@@ -298,7 +286,7 @@ try {
 }
 ```
 
-## Type Safety
+## 🎯 Type Safety
 
 All responses are fully typed using types generated from the official AllDebrid API v4.1 OpenAPI specification:
 
@@ -306,7 +294,7 @@ All responses are fully typed using types generated from the official AllDebrid 
 import type { GetLinkUnlockResponse, GetMagnetStatusResponse, GetUserResponse } from '@adbjs/sdk'
 ```
 
-## Development
+## 🏗️ Development
 
 ```bash
 # Install dependencies
@@ -325,11 +313,11 @@ pnpm test
 pnpm typecheck
 ```
 
-## License
+## 📝 License
 
 MIT
 
-## Links
+## 🔗 Links
 
 - [AllDebrid API Documentation](https://docs.alldebrid.com/)
 - [GitHub Repository](https://github.com/Trisard/alldebrid-ts)

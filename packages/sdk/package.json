@@ -1,7 +1,7 @@
 {
   "name": "@adbjs/sdk",
   "type": "module",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Modern TypeScript SDK for AllDebrid API",
   "author": "Trisard",
   "license": "MIT",

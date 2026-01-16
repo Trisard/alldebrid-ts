@@ -10,7 +10,7 @@ import { UserResource } from './resources/user.js'
 import { VoucherResource } from './resources/voucher.js'
 
 const DEFAULT_BASE_URL = 'https://api.alldebrid.com/v4.1'
-const DEFAULT_AGENT = '@alldebrid/sdk'
+const DEFAULT_AGENT = '@adbjs/sdk'
 const DEFAULT_TIMEOUT = 30000
 const DEFAULT_MAX_RETRIES = 3
 
