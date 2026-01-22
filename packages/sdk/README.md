@@ -18,6 +18,8 @@ Modern TypeScript SDK for the AllDebrid API v4.1.
 ```bash
 npm install @adbjs/sdk
 # or
+bun add @adbjs/sdk
+# or
 pnpm add @adbjs/sdk
 # or
 yarn add @adbjs/sdk
@@ -298,19 +300,19 @@ import type { GetLinkUnlockResponse, GetMagnetStatusResponse, GetUserResponse } 
 
 ```bash
 # Install dependencies
-pnpm install
+bun install
 
 # Generate types from OpenAPI spec
-pnpm generate
+bun run generate
 
 # Build
-pnpm build
+bun run build
 
 # Run tests
-pnpm test
+bun test
 
 # Type check
-pnpm typecheck
+bun run typecheck
 ```
 
 ## 📝 License

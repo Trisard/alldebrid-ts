@@ -1,0 +1,88 @@
+name: Release CLI Binaries
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag (e.g., v1.0.0)'
+        required: true
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: bun-linux-x64
+            artifact: adb-linux-x64
+          - os: ubuntu-latest
+            target: bun-linux-arm64
+            artifact: adb-linux-arm64
+          - os: macos-latest
+            target: bun-darwin-x64
+            artifact: adb-darwin-x64
+          - os: macos-latest
+            target: bun-darwin-arm64
+            artifact: adb-darwin-arm64
+          - os: windows-latest
+            target: bun-windows-x64
+            artifact: adb-windows-x64.exe
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Build CLI executable
+        run: |
+          cd packages/cli
+          bun build ./src/index.ts --compile --target=${{ matrix.target }} --outfile ./bin/${{ matrix.artifact }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: packages/cli/bin/${{ matrix.artifact }}
+
+  upload-release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
+
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Get release tag
+        id: tag
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "tag=${{ github.event.inputs.tag }}" >> $GITHUB_OUTPUT
+          else
+            echo "tag=${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload binaries to release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag.outputs.tag }}
+          files: |
+            artifacts/adb-linux-x64/adb-linux-x64
+            artifacts/adb-linux-arm64/adb-linux-arm64
+            artifacts/adb-darwin-x64/adb-darwin-x64
+            artifacts/adb-darwin-arm64/adb-darwin-arm64
+            artifacts/adb-windows-x64.exe/adb-windows-x64.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

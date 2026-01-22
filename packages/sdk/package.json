@@ -1,7 +1,7 @@
 {
   "name": "@adbjs/sdk",
   "type": "module",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "description": "Modern TypeScript SDK for AllDebrid API",
   "author": "Trisard",
   "license": "MIT",
@@ -46,11 +46,14 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
-    "test": "vitest",
+    "build": "bun run build:esm && bun run build:cjs && bun run build:types",
+    "build:esm": "bun build ./src/index.ts --outdir ./dist --target node",
+    "build:cjs": "bun build ./src/index.ts --outfile ./dist/index.cjs --target node",
+    "build:types": "dts-bundle-generator -o dist/index.d.ts src/index.ts && cp dist/index.d.ts dist/index.d.cts",
+    "dev": "bun run build --watch",
+    "test": "bun test",
     "typecheck": "tsc --noEmit",
-    "generate": "node scripts/generate-types.js"
+    "generate": "bun run scripts/generate-types.js"
   },
   "dependencies": {
     "wretch": "^3.0.3"
@@ -58,9 +61,8 @@
   "devDependencies": {
     "@hey-api/openapi-ts": "^0.55.0",
     "@types/node": "^24.10.1",
-    "tsup": "^8.3.5",
+    "dts-bundle-generator": "^9.5.1",
     "typescript": "^5.7.2",
-    "valibot": "^0.42.1",
-    "vitest": "^2.1.8"
+    "valibot": "^0.42.1"
   }
 }

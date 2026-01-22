@@ -80,7 +80,7 @@ See the [@adbjs/cli README](./packages/cli/README.md) for full documentation.
 ### SDK
 
 - 🎯 **Type-safe** - Full TypeScript support with types generated from OpenAPI spec
-- 🚀 **Modern** - Built with latest tooling (wretch, vitest, pnpm)
+- 🚀 **Modern** - Built with Bun and wretch
 - 📦 **Tree-shakeable** - ESM + CJS, import only what you need
 - 🔄 **Auto-retry** - Built-in retry logic with configurable attempts
 - 🎨 **Developer-friendly** - Intuitive API with JSDoc comments
@@ -102,26 +102,25 @@ See the [@adbjs/cli README](./packages/cli/README.md) for full documentation.
 
 This project uses:
 
-- **pnpm** - Fast, efficient package manager
+- **Bun** - Fast all-in-one JavaScript runtime
 - **TypeScript** - Strict mode with exactOptionalPropertyTypes
-- **tsup** - Fast, zero-config bundler
-- **Vitest** - Fast, modern test runner
+- **dts-bundle-generator** - TypeScript declaration bundler
 - **hey-api/openapi-ts** - OpenAPI type generation
 
 ### Setup
 
 ```bash
 # Install dependencies
-pnpm install
+bun install
 
 # Generate types from AllDebrid OpenAPI spec
-pnpm --filter @adbjs/sdk generate
+bun run generate
 
 # Build all packages
-pnpm build
+bun run build
 
 # Run tests
-pnpm test
+bun test
 ```
 
 ### Project Structure
@@ -138,13 +137,7 @@ alldebrid-ts/
 │   │   │   └── generated/   # Auto-generated types from OpenAPI
 │   │   └── tests/           # Test files
 │   └── cli/                 # Command-line interface
-└── pnpm-workspace.yaml
 ```
-
-## 📋 Roadmap
-
-- [ ] Migrate to Bun for faster builds and native executable compilation
-- [ ] Standalone executables for Windows, macOS, and Linux (no Node.js required)
 
 ## 📝 License
 

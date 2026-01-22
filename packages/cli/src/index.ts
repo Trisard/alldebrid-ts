@@ -1,8 +1,5 @@
 #!/usr/bin/env node
 
-import { readFileSync } from 'node:fs'
-import { dirname, join } from 'node:path'
-import { fileURLToPath } from 'node:url'
 import { Command } from 'commander'
 import { authInteractive, authLogin, authLogout, authStatus } from './commands/auth.js'
 import { hostDomains, hostList } from './commands/host.js'
@@ -40,15 +37,14 @@ import {
 } from './commands/voucher.js'
 import { setJsonMode } from './utils/output.js'
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
-const packageJson = JSON.parse(readFileSync(join(__dirname, '../package.json'), 'utf-8'))
+const VERSION = '1.1.0'
 
 const program = new Command()
 
 program
   .name('adb')
   .description('AllDebrid CLI - Manage your AllDebrid account from the terminal')
-  .version(packageJson.version)
+  .version(VERSION)
   .option('--api-key <key>', 'AllDebrid API key (overrides config file)')
   .option('--json', 'Output results in JSON format')
   .hook('preAction', (thisCommand) => {

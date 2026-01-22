@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2025-01-19
+
+### Added
+
+- **Standalone executables**: Pre-built binaries for all major platforms
+  - Windows x64 (`adb-windows-x64.exe`)
+  - Linux x64 (`adb-linux-x64`)
+  - Linux ARM64 (`adb-linux-arm64`)
+  - macOS x64 (`adb-darwin-x64`)
+  - macOS ARM64 / Apple Silicon (`adb-darwin-arm64`)
+  - No Node.js installation required
+  - Available on [GitHub Releases](https://github.com/Trisard/alldebrid-ts/releases)
+
+### Changed
+
+- **Build system migration**: Migrated from tsup to Bun
+  - `bun build` for JavaScript bundling
+  - `bun build --compile` for standalone executables
+
+### Documentation
+
+- Updated README with standalone executable installation instructions
+- Added platform-specific download table
+- Updated requirements section to mention standalone option
+
 ## [1.0.1] - 2025-01-16
 
 ### Fixed

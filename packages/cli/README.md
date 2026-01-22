@@ -14,15 +14,35 @@ Command-line interface for AllDebrid API v4.1 - manage your torrents, links, and
 
 ## 📦 Installation
 
+### Via npm (requires Node.js)
+
 ```bash
 npm install -g @adbjs/cli
+# or
+bun add -g @adbjs/cli
+# or
+pnpm add -g @adbjs/cli
 ```
 
-Or with other package managers:
+### Standalone executables (no runtime required)
+
+Download the latest binary for your platform from [GitHub Releases](https://github.com/Trisard/alldebrid-ts/releases):
+
+| Platform                    | Download              |
+| --------------------------- | --------------------- |
+| Windows x64                 | `adb-windows-x64.exe` |
+| Linux x64                   | `adb-linux-x64`       |
+| Linux ARM64                 | `adb-linux-arm64`     |
+| macOS x64                   | `adb-darwin-x64`      |
+| macOS ARM64 (Apple Silicon) | `adb-darwin-arm64`    |
 
 ```bash
-pnpm add -g @adbjs/cli
-yarn global add @adbjs/cli
+# Linux/macOS: Make executable and run
+chmod +x adb-linux-x64
+./adb-linux-x64 --version
+
+# Windows: Just run
+adb-windows-x64.exe --version
 ```
 
 ## 🚀 Quick Start
@@ -306,7 +326,8 @@ done
 
 ## 📋 Requirements
 
-- Node.js >= 20.0.0
+- Node.js >= 20.0.0 (for npm installation)
+- **OR** download standalone executable (no Node.js required)
 - AllDebrid account with API access
 
 ## 🔗 Related
