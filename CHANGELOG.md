@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.1] - 2025-01-22
+
+### Fixed
+
+- **Monorepo workspaces configuration**: Added `workspaces` field to root package.json
+  - Fixes dependency resolution for local development
+  - Enables proper symlinks between packages
+
+- **CI workflow**: Fixed GitHub Actions release workflow
+  - Added SDK build step before CLI compilation (required for workspace symlinks)
+  - Fixed executable build command to properly resolve dependencies
+
 ## [1.3.0] - 2025-01-19
 
 ### Changed

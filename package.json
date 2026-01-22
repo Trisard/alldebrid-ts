@@ -1,9 +1,12 @@
 {
   "name": "alldebrid-ts",
   "type": "module",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "private": true,
   "description": "Modern TypeScript SDK for AllDebrid API",
+  "workspaces": [
+    "packages/*"
+  ],
   "engines": {
     "node": ">=20.0.0"
   },

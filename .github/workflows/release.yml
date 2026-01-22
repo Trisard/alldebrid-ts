@@ -43,6 +43,9 @@ jobs:
       - name: Install dependencies
         run: bun install
 
+      - name: Build SDK
+        run: bun run --cwd packages/sdk build
+
       - name: Build CLI executable
         run: |
           cd packages/cli
