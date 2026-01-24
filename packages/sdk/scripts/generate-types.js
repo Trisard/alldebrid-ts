@@ -4,7 +4,7 @@ import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
-const ROOT_SPEC_PATH = join(__dirname, '../../../alldebrid-spec.json')
+const ROOT_SPEC_PATH = join(__dirname, '../../../spec/alldebrid-spec.json')
 
 async function generateTypes() {
   console.log('🔧 Generating TypeScript types...')
@@ -31,7 +31,7 @@ async function generateTypes() {
     console.log('✅ TypeScript types generated successfully')
   } catch (error) {
     console.error('❌ Failed to generate types:', error)
-    console.error('  Make sure alldebrid-spec.json exists at the project root')
+    console.error('  Make sure alldebrid-spec.json exists in the spec/ folder')
     process.exit(1)
   }
 }

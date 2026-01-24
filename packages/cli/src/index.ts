@@ -37,7 +37,7 @@ import {
 } from './commands/voucher.js'
 import { setJsonMode } from './utils/output.js'
 
-const VERSION = '1.1.0'
+const VERSION = '1.1.1'
 
 const program = new Command()
 

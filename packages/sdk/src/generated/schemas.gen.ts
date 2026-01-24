@@ -513,10 +513,7 @@ export const MagnetFileSchema = {
             type: 'integer'
         },
         l: {
-            type: 'array',
-            items: {
-                type: 'string'
-            }
+            type: 'string'
         },
         e: {
             type: 'array',

@@ -379,11 +379,9 @@ export async function magnetFiles(id: string): Promise<void> {
 function extractFiles(files: any[], level: number): void {
   for (const file of files) {
     const indent = '  '.repeat(level)
-    if (file.l && file.l.length > 0) {
+    if (file.l) {
       console.log(`${indent}${chalk.bold(file.n)}`)
-      file.l.forEach((link: string) => {
-        console.log(`${indent}  ${chalk.blue.underline(link)}`)
-      })
+      console.log(`${indent}  ${chalk.blue.underline(file.l)}`)
     }
     if (file.e && file.e.length > 0) {
       console.log(`${indent}${chalk.dim(`${file.n}/`)}`)

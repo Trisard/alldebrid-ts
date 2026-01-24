@@ -95,7 +95,7 @@ export type LinkInfosResponseData = {
 export type MagnetFile = {
     n?: string;
     s?: number;
-    l?: Array<(string)>;
+    l?: string;
     e?: Array<MagnetFile>;
 };
 

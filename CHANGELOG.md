@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.2] - 2026-01-24
+
+### Fixed
+
+- **SDK type fix**: `MagnetFile.l` correctly typed as string (was array)
+- **CLI fix**: Fixed `magnet files` command error displaying download links
+
+### Changed
+
+- **Project structure**: Moved OpenAPI spec to `spec/` folder
+
+### @adbjs/sdk v2.1.1
+
+- Fixed `MagnetFile.l` type definition
+
+### @adbjs/cli v1.1.1
+
+- Fixed `magnet files` command
+
 ## [1.3.1] - 2025-01-22
 
 ### Fixed
